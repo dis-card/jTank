@@ -1,5 +1,8 @@
 package in.darkstars.entity;
 
+import java.awt.Rectangle;
+import java.util.ArrayList;
+
 import in.darkstars.main.JTank;
 import in.darkstars.main.JTank.Direction;
 
@@ -16,8 +19,8 @@ public class Bullet {
 	private float posX;
 	private float posY;
 	private float velocity;
-	public static final float HEIGHT = 5;
-	public static final float WIDTH = 5;
+	public static final int HEIGHT = 5;
+	public static final int WIDTH = 5;
 	private Direction bulletDirection;
 	
 	public Bullet(float x, float y, Direction tankDirection)
@@ -92,6 +95,21 @@ public class Bullet {
 			return true;
 		else
 			return false;
+	}
+	
+	public boolean isCollided(ArrayList<Rectangle> obstacleList)
+	{
+		boolean collided = false;
+		Rectangle bulletBounds = new Rectangle((int)posX, (int)posY, WIDTH, HEIGHT);		
+		for(Rectangle obstacles : obstacleList)
+		{
+			if ( bulletBounds.intersects(obstacles))
+			{
+				collided = true;
+				break;
+			}
+		}
+		return collided;
 	}
 	
 	
