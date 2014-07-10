@@ -27,10 +27,13 @@ public class JTank extends BasicGame {
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 640;
+	public static enum Direction  {UP, DOWN, LEFT, RIGHT};
+	public static final int NUMBER_OF_BULLETS_PER_FRAME = 5;
 	private static final int TILEWIDTH = 32;
 	private static final int TILEHEIGHT = 32;
 	private static final int SIZE = 32;
 	private static final float SPEED = 4;
+	private Direction tankDirection;
 
 	private int statusCode = 0;
 	private TiledMap map;
@@ -90,7 +93,7 @@ public class JTank extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		
 		obstaclesList = new ArrayList<Rectangle>();
-		bulletList = new Bullet[5];
+		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];
 
 		map = new TiledMap("./resources/one.tmx");
 		blocked = new boolean[map.getWidth()][map.getHeight()];		
@@ -122,6 +125,7 @@ public class JTank extends BasicGame {
 		left = new Animation(leftTankSheet, 300);
 		down = new Animation(downTankSheet, 300);
 		sprite = up;
+		tankDirection = Direction.UP;
 		posX = 0;
 		posY = HEIGHT - TILEHEIGHT;
 	}
@@ -134,22 +138,25 @@ public class JTank extends BasicGame {
 
 		if (input.isKeyDown(Input.KEY_UP)) {
 			sprite = up;
-			if (!isBlocked(posX, posY - SPEED,"UP")) {
-				posY -= SPEED;
+			tankDirection = Direction.UP;
+			if (!isBlocked(posX, posY - SPEED)) {
+				posY -= SPEED;				
 				sprite.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_DOWN)) {
 
 			sprite = down;
-			if (!isBlocked(posX, posY + SPEED,"DOWN")) {
-				posY += SPEED;
+			tankDirection = Direction.DOWN;
+			if (!isBlocked(posX, posY + SPEED)) {
+				posY += SPEED;				
 				sprite.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_RIGHT)) {
 			sprite = right;
-			if (!isBlocked(posX + SPEED, posY,"RIGHT")) {
+			tankDirection = Direction.RIGHT;
+			if (!isBlocked(posX + SPEED, posY)) {
 				posX = posX + SPEED;
 				sprite.update(delta);
 			}
@@ -157,8 +164,8 @@ public class JTank extends BasicGame {
 		} else if (input.isKeyDown(Input.KEY_LEFT)) {
 
 			sprite = left;
-
-			if (!isBlocked(posX - SPEED, posY,"LEFT")) {
+			tankDirection = Direction.LEFT;
+			if (!isBlocked(posX - SPEED, posY)) {
 				posX -= SPEED;				
 				sprite.update(delta);
 			}
@@ -168,7 +175,22 @@ public class JTank extends BasicGame {
 			{
 				if ( bulletList[i] == null )
 				{
-					bulletList[i] = new Bullet(posX, posY);
+					switch(tankDirection)
+					{
+					case UP:
+						bulletList[i] = new Bullet(posX+SIZE/2, posY,tankDirection);
+						break;
+					case DOWN:
+						bulletList[i] = new Bullet(posX+SIZE/2, posY+SIZE,tankDirection);
+						break;
+					case RIGHT:
+						bulletList[i] = new Bullet(posX+SIZE, posY+SIZE/2,tankDirection);
+						break;
+					case LEFT:
+						bulletList[i] = new Bullet(posX , posY+SIZE/2,tankDirection);
+						break;					
+					}
+					
 					break;
 				}
 			}
@@ -179,16 +201,22 @@ public class JTank extends BasicGame {
 			System.exit(statusCode);
 		}
 		
+		for (int i = 0; i < bulletList.length; i++)
+		{
+			if ( bulletList[i] != null && bulletList[i].isOutOfScreen() )
+				bulletList[i] = null;
+		}
+		
 
 	}
 
-	private boolean isBlocked(float x, float y, String direc) {
-		boolean result = false;
+	private boolean isBlocked(float x, float y) {
+		boolean inCollision = false;
 		
 		Rectangle playerBounds = new Rectangle((int)x,(int)y,SIZE,SIZE);
 		if (x > (WIDTH - SIZE) || x < 0 || y > (HEIGHT - SIZE) || y < 0)
 		{
-			result = true;
+			inCollision = true;
 		}
 		else 
 		{
@@ -196,12 +224,12 @@ public class JTank extends BasicGame {
 			{
 				if ( playerBounds.intersects(obstacle) )
 				{
-					result = true;
+					inCollision = true;
 					break;
 				}
 			}
 		}
 				
-		return result;
+		return inCollision;
 	}
 }

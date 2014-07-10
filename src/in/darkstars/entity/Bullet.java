@@ -1,5 +1,8 @@
 package in.darkstars.entity;
 
+import in.darkstars.main.JTank;
+import in.darkstars.main.JTank.Direction;
+
 import org.newdawn.slick.Graphics;
 
 /**
@@ -13,13 +16,15 @@ public class Bullet {
 	private float posX;
 	private float posY;
 	private float velocity;
-	private float height = 5;
-	private float width = 5;
+	public static final float HEIGHT = 5;
+	public static final float WIDTH = 5;
+	private Direction bulletDirection;
 	
-	public Bullet(float x, float y)
+	public Bullet(float x, float y, Direction tankDirection)
 	{
 		this.posX = x;
 		this.posY = y;
+		this.bulletDirection = tankDirection;
 		this.velocity = 5;
 	}
 	/**
@@ -61,8 +66,32 @@ public class Bullet {
 	
 	public void render(Graphics g)
 	{
-		g.drawOval(posX, posY-velocity, width, height);
+		switch(bulletDirection)
+		{
+		case UP:
+			posY -= velocity;
+			break;
+		case DOWN:
+			posY += velocity;
+			break;
+		case LEFT:
+			posX -= velocity;
+			break;
+		case RIGHT:
+			posX += velocity;
+			break;	
 		
+		}
+		g.drawOval(posX, posY, WIDTH, HEIGHT);
+		
+	} 
+	
+	public boolean isOutOfScreen()
+	{
+		if ( posX > JTank.WIDTH || posX < 0 || posY > JTank.HEIGHT || posY < 0 )
+			return true;
+		else
+			return false;
 	}
 	
 	
