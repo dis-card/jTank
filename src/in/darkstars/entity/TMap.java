@@ -1,9 +1,11 @@
 package in.darkstars.entity;
 
 import static in.darkstars.main.JTank.SIZE;
+import in.darkstars.main.JTank;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
@@ -16,8 +18,9 @@ import org.newdawn.slick.tiled.TiledMap;
  */
 public class TMap extends TiledMap {
 	
-	private ArrayList<Rectangle> obstaclesList;
+	private ArrayList<Rectangle> obstaclesList, freePathList;
 	private boolean blocked [][];
+	private Random random;
 
 	/**
 	 * @param ref
@@ -28,7 +31,6 @@ public class TMap extends TiledMap {
 		init();
 		
 	}
-	
 	
 	
 	/**
@@ -69,8 +71,10 @@ public class TMap extends TiledMap {
 
 	private void init()
 	{
+		random = new Random();
 		blocked = new boolean[this.getWidth()][this.getHeight()];
 		obstaclesList = new ArrayList<Rectangle>();
+		freePathList = new ArrayList<Rectangle>();
 		for (int x = 0; x < this.getWidth(); x++) {
 			for (int y = 0; y < this.getHeight(); y++) {
 				int tileId = this.getTileId(x, y, 0);
@@ -79,6 +83,10 @@ public class TMap extends TiledMap {
 					blocked[x][y] = true;
 					obstaclesList.add(new Rectangle(x * SIZE, y * SIZE, SIZE,
 							SIZE));
+				}
+				else
+				{
+					freePathList.add(new Rectangle(x * SIZE, y*SIZE, SIZE, SIZE));
 				}
 			}
 		}
@@ -99,8 +107,10 @@ public class TMap extends TiledMap {
 		return collided;
 	}
 	
-	
-	
-	
-
+	public int[] getValidPos()
+	{
+		Rectangle rec =  freePathList.get(random.nextInt(freePathList.size()));
+		return new int[] {(int)rec.getX(),(int)rec.getY()};
+		
+	}
 }

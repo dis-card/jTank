@@ -1,6 +1,7 @@
 package in.darkstars.main;
 
 import in.darkstars.entity.Bullet;
+import in.darkstars.entity.Enemy;
 import in.darkstars.entity.TMap;
 
 import java.awt.Rectangle;
@@ -36,6 +37,7 @@ public class JTank extends BasicGame {
 	private static final int TILEHEIGHT = 32;
 	public static final int SIZE = 32;
 	private static final float SPEED = 4;
+	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 6;
 	private Direction tankDirection;
 
 	private int statusCode = 0;
@@ -48,8 +50,8 @@ public class JTank extends BasicGame {
 	private boolean blocked[][];
 
 	private Bullet bulletList[];
+	private Enemy enemyList[];
 
-	// private Bullet bulletArray[];
 
 	/**
 	 * @param title
@@ -91,15 +93,31 @@ public class JTank extends BasicGame {
 			}
 			
 		}
+		for (int i = 0; i < enemyList.length; i++) {
+			Enemy enemy = enemyList[i];
+			if (enemy != null) {
+				enemy.render();			
+			}
+			
+		}
 
 	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
+		
+		
 
-		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];
 		map = new TMap("./resources/one.tmx");
-		SpriteSheet upTankSheet = new SpriteSheet("resources/upTankSheet.jpg",
+		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];
+		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME];
+		for ( int i = 0; i < enemyList.length; i++)
+		{
+			int posX = map.getValidPos()[0];
+			int posY = map.getValidPos()[1];
+			enemyList[i] = new Enemy(posX, posY, map);
+		}
+		SpriteSheet upTankSheet = new SpriteSheet("resources/upTank.jpg",
 				TILEWIDTH, TILEHEIGHT);
 		SpriteSheet rightTankSheet = new SpriteSheet("resources/rightTank.jpg",
 				TILEWIDTH, TILEHEIGHT);
@@ -190,6 +208,7 @@ public class JTank extends BasicGame {
 
 			System.exit(statusCode);
 		}
+		
 
 		/* Code to update bullets */
 		for (int i = 0; i < bulletList.length; i++) {
@@ -209,6 +228,16 @@ public class JTank extends BasicGame {
 					bullet.update();
 				}
 				
+			}
+		}
+		
+		/* Code to update the enemies */
+		for ( int i = 0; i < enemyList.length; i++)
+		{
+			Enemy enemy = enemyList[i];
+			if ( enemy != null )
+			{
+				enemy.update();
 			}
 		}
 

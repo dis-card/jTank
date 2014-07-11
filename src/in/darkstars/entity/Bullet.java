@@ -121,7 +121,13 @@ public class Bullet {
 
 	public void update() {
 		if (!exploded) {
-			
+		}
+
+	}
+
+	public void render(Graphics g) {
+
+		if (!exploded) {
 			switch (bulletDirection) {
 			case UP:
 				posY -= velocity;
@@ -137,14 +143,6 @@ public class Bullet {
 				break;
 			}
 	
-		}
-
-	}
-
-	public void render(Graphics g) {
-
-		if (!exploded) {
-		
 			g.drawOval(posX, posY, WIDTH, HEIGHT);
 		} else {
 			if (!positionAdjusted) {
