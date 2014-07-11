@@ -32,10 +32,10 @@ public class Enemy {
 		this.posX = posX;
 		this.posY = posY;
 		this.map = map;
-		this.up = new Image("resources/upTank.jpg");
-		this.down = new Image("resources/downTank.jpg");
-		this.left = new Image("resources/leftTank.jpg");
-		this.right = new Image("resources/rightTank.jpg");
+		this.up = new Image("resources/images/upTank.jpg");
+		this.down = new Image("resources/images/downTank.jpg");
+		this.left = new Image("resources/images/leftTank.jpg");
+		this.right = new Image("resources/images/rightTank.jpg");
 		this.direc = Direction.DOWN;
 		this.randomDirec = new Random();
 	}

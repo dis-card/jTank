@@ -117,7 +117,7 @@ public class JTank extends BasicGame {
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		map = new TMap("./resources/one.tmx");						// Initializing the map.
+		map = new TMap("resources/maps/one.tmx");						// Initializing the map.
 		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];		// Initializing the list for tracking player bullets.
 		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME];			// Initializing the list for enemies.
 		for ( int i = 0; i < enemyList.length; i++)					// Creating enemies and adding them to the list.
@@ -126,10 +126,10 @@ public class JTank extends BasicGame {
 			int posY = map.getValidPos()[1];
 			enemyList[i] = new Enemy(posX, posY, map);
 		}
-		upTank = new Image("resources/upTank.jpg");
-		rightTank = new Image("resources/rightTank.jpg");
-		leftTank = new Image("resources/leftTank.jpg");
-		downTank = new Image("resources/downTank.jpg");
+		upTank = new Image("resources/images/upTank.jpg");
+		rightTank = new Image("resources/images/rightTank.jpg");
+		leftTank = new Image("resources/images/leftTank.jpg");
+		downTank = new Image("resources/images/downTank.jpg");
 
 		
 
