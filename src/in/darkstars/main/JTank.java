@@ -45,10 +45,8 @@ public class JTank extends BasicGame {
 	private TMap map;
 	private int mapPosX = 0;
 	private int mapPosY = 0;
-	private Animation explosion;
 	private float posY = 0;
 	private float posX = 0;
-	private boolean blocked[][];
 
 	private Bullet bulletList[];
 	private Enemy enemyList[];
@@ -90,7 +88,7 @@ public class JTank extends BasicGame {
 			throws SlickException {
 
 		/* Rendering map on the screen */
-		map.render(mapPosX, mapPosY);
+		map.render(mapPosX, mapPosY,0);
 		
 		/* Rendering player on the screen */
 		player.draw((int) posX, (int) posY);
@@ -112,12 +110,13 @@ public class JTank extends BasicGame {
 			}
 			
 		}
+		map.render(mapPosX, mapPosY,1);
 
 	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		map = new TMap("resources/maps/one.tmx");						// Initializing the map.
+		map = new TMap("resources/maps/newOne.tmx");						// Initializing the map.
 		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];		// Initializing the list for tracking player bullets.
 		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME];			// Initializing the list for enemies.
 		for ( int i = 0; i < enemyList.length; i++)					// Creating enemies and adding them to the list.

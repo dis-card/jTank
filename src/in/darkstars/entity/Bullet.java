@@ -38,7 +38,7 @@ public class Bullet {
 	}
 
 	private void init() throws SlickException {
-		SpriteSheet explosionSheet = new SpriteSheet("resources/explosion.png",
+		SpriteSheet explosionSheet = new SpriteSheet("resources/images/explosion.png",
 				36, 38);
 		explosion = new Animation(explosionSheet, 100);
 		explosion.setLooping(false);

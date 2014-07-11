@@ -18,26 +18,52 @@ import org.newdawn.slick.SlickException;
  */
 public class Enemy {
 
-	private static final float SPEED = 1;
+	private static final int HOUDINI_LIFE = 3;
+	private static final int SHARP_SHOOTER_LIFE = 5;
+	private static final int TANK_LIFE = 10;
+	private float speed = 1;
 	private int posX;
 	private int posY;
 	private Image up, down, left, right, enemy;
 	private TMap map;
+	private int life;
 
 	private Direction direc;
-	private Random randomDirec;
+	private Random random;
 
 	public Enemy(int posX, int posY, TMap map) throws SlickException {
 
 		this.posX = posX;
 		this.posY = posY;
 		this.map = map;
-		this.up = new Image("resources/images/upTank.jpg");
-		this.down = new Image("resources/images/downTank.jpg");
-		this.left = new Image("resources/images/leftTank.jpg");
-		this.right = new Image("resources/images/rightTank.jpg");
 		this.direc = Direction.DOWN;
-		this.randomDirec = new Random();
+		this.random = new Random();
+		switch (random.nextInt(4)) {
+		case 0:
+			this.up = new Image("resources/images/upTank.jpg");
+			this.down = new Image("resources/images/downTank.jpg");
+			this.left = new Image("resources/images/leftTank.jpg");
+			this.right = new Image("resources/images/rightTank.jpg");
+			life = TANK_LIFE;
+			break;
+		case 1:
+			this.up = new Image("resources/images/upSharpShooter.png");
+			this.down = new Image("resources/images/downSharpShooter.png");
+			this.left = new Image("resources/images/leftSharpShooter.png");
+			this.right = new Image("resources/images/rightSharpShooter.png");
+			speed = 2;
+			life = SHARP_SHOOTER_LIFE;
+			break;
+		case 2:
+		case 3:
+			this.up = new Image("resources/images/upHoudini.png");
+			this.down = new Image("resources/images/downHoudini.png");
+			this.left = new Image("resources/images/leftHoudini.png");
+			this.right = new Image("resources/images/rightHoudini.png");
+			speed = 4;
+			life = HOUDINI_LIFE;
+			break;
+		}
 	}
 
 	/**
@@ -106,45 +132,44 @@ public class Enemy {
 	public void update() {
 		switch (direc) {
 		case UP:
-			if (!inCollision(posX, posY - SPEED)) {
-				posY -= SPEED;
+			if (!inCollision(posX, posY - speed)) {
+				posY -= speed;
 			} else {
 				changeDirection();
 			}
 			break;
 		case DOWN:
-			if (!inCollision(posX, posY + SPEED)) {
-				posY += SPEED;
+			if (!inCollision(posX, posY + speed)) {
+				posY += speed;
 			} else {
 				changeDirection();
 			}
 			break;
 		case LEFT:
-			if (!inCollision(posX - SPEED, posY)) {
-				posX -= SPEED;
+			if (!inCollision(posX - speed, posY)) {
+				posX -= speed;
 			} else {
 				changeDirection();
 			}
 			break;
 		case RIGHT:
-			if (!inCollision(posX + SPEED, posY)) {
-				posX += SPEED;
+			if (!inCollision(posX + speed, posY)) {
+				posX += speed;
 			} else {
 				changeDirection();
 			}
 			break;
 		}
-		
+
 	}
 
 	/**
 	 * 
 	 */
 	private void changeDirection() {
-		
-		int randomInt = randomDirec.nextInt(4);
-		switch(randomInt)
-		{
+
+		int randomDirec = random.nextInt(4);
+		switch (randomDirec) {
 		case 0:
 			direc = Direction.UP;
 			break;
@@ -158,17 +183,6 @@ public class Enemy {
 			direc = Direction.RIGHT;
 			break;
 		}
-
-		/*if (direc == Direction.UP)
-			direc = Direction.LEFT;
-		else if (direc == Direction.LEFT)
-			direc = Direction.DOWN;
-		else if (direc == Direction.DOWN)
-			direc = Direction.RIGHT;
-		else if (direc == Direction.RIGHT)
-			direc = Direction.UP;
-	*/
-
 	}
 
 	private boolean inCollision(float posX, float posY) {
@@ -184,7 +198,7 @@ public class Enemy {
 					break;
 				}
 			}
-		}		
+		}
 		return collided;
 	}
 
