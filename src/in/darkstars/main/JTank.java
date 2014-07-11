@@ -1,6 +1,7 @@
 package in.darkstars.main;
 
 import in.darkstars.entity.Bullet;
+import in.darkstars.entity.TMap;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -33,19 +34,19 @@ public class JTank extends BasicGame {
 	public static final int NUMBER_OF_BULLETS_PER_FRAME = 5;
 	private static final int TILEWIDTH = 32;
 	private static final int TILEHEIGHT = 32;
-	private static final int SIZE = 32;
+	public static final int SIZE = 32;
 	private static final float SPEED = 4;
 	private Direction tankDirection;
 
 	private int statusCode = 0;
-	private TiledMap map;
+	private TMap map;
 	private int mapPosX = 0;
 	private int mapPosY = 0;
-	private Animation up, down, left, right, sprite;
+	private Animation up, down, left, right, sprite, explosion;
 	private float posY = 0;
 	private float posX = 0;
 	private boolean blocked[][];
-	private ArrayList<Rectangle> obstaclesList;	
+
 	private Bullet bulletList[];
 
 	// private Bullet bulletArray[];
@@ -82,9 +83,13 @@ public class JTank extends BasicGame {
 
 		map.render(mapPosX, mapPosY);
 		sprite.draw((int) posX, (int) posY);
+
 		for (int i = 0; i < bulletList.length; i++) {
-			if (bulletList[i] != null)
-				bulletList[i].render(g);
+			Bullet bullet = bulletList[i];
+			if (bullet != null) {
+				bullet.render(g);			
+			}
+			
 		}
 
 	}
@@ -92,22 +97,8 @@ public class JTank extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 
-		obstaclesList = new ArrayList<Rectangle>();
 		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];
-
-		map = new TiledMap("./resources/one.tmx");
-		blocked = new boolean[map.getWidth()][map.getHeight()];
-		for (int x = 0; x < map.getWidth(); x++) {
-			for (int y = 0; y < map.getHeight(); y++) {
-				int tileId = map.getTileId(x, y, 0);
-				String value = map.getTileProperty(tileId, "blocked", "false");
-				if (value.equals("true")) {
-					blocked[x][y] = true;
-					obstaclesList.add(new Rectangle(x * SIZE, y * SIZE, SIZE,
-							SIZE));
-				}
-			}
-		}
+		map = new TMap("./resources/one.tmx");
 		SpriteSheet upTankSheet = new SpriteSheet("resources/upTankSheet.jpg",
 				TILEWIDTH, TILEHEIGHT);
 		SpriteSheet rightTankSheet = new SpriteSheet("resources/rightTank.jpg",
@@ -116,6 +107,9 @@ public class JTank extends BasicGame {
 				TILEWIDTH, TILEHEIGHT);
 		SpriteSheet downTankSheet = new SpriteSheet("resources/downTank.jpg",
 				TILEWIDTH, TILEHEIGHT);
+
+		
+
 		up = new Animation(upTankSheet, 300);
 		right = new Animation(rightTankSheet, 300);
 		left = new Animation(leftTankSheet, 300);
@@ -131,6 +125,8 @@ public class JTank extends BasicGame {
 			throws SlickException {
 
 		Input input = container.getInput();
+
+		/* Key press handling code */
 
 		if (input.isKeyDown(Input.KEY_UP)) {
 			sprite = up;
@@ -193,11 +189,27 @@ public class JTank extends BasicGame {
 		} else if (input.isKeyPressed(Input.KEY_ESCAPE)) {
 
 			System.exit(statusCode);
-		}		
+		}
 
+		/* Code to update bullets */
 		for (int i = 0; i < bulletList.length; i++) {
-			if (bulletList[i] != null && ( bulletList[i].isOutOfScreen() || bulletList[i].isCollided(obstaclesList)) )
-				bulletList[i] = null;
+			Bullet bullet = bulletList[i];
+			if (bullet != null) {
+				if (bullet.isOutOfScreen() || ( bullet.isExploded() && bullet.getExplosion().isStopped() ))
+				{
+					bulletList[i] = null;
+				}
+				else if (map.inCollision(new Rectangle((int) bullet.getPosX(), (int) bullet.getPosY(), Bullet.WIDTH, Bullet.HEIGHT)))
+				{
+						bullet.setExploded(true);			
+						bullet.getExplosion().update(delta);
+				}
+				else
+				{
+					bullet.update();
+				}
+				
+			}
 		}
 
 	}
@@ -209,12 +221,9 @@ public class JTank extends BasicGame {
 		if (x > (WIDTH - SIZE) || x < 0 || y > (HEIGHT - SIZE) || y < 0) {
 			inCollision = true;
 		} else {
-			for (Rectangle obstacle : obstaclesList) {
-				if (playerBounds.intersects(obstacle)) {
-					inCollision = true;
-					break;
-				}
-			}
+			if (map.inCollision(playerBounds))
+				inCollision = true;
+
 		}
 
 		return inCollision;
