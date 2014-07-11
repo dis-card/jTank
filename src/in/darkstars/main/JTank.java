@@ -12,6 +12,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -37,20 +38,25 @@ public class JTank extends BasicGame {
 	private static final int TILEHEIGHT = 32;
 	public static final int SIZE = 32;
 	private static final float SPEED = 4;
-	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 6;
+	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 10;
 	private Direction tankDirection;
 
 	private int statusCode = 0;
 	private TMap map;
 	private int mapPosX = 0;
 	private int mapPosY = 0;
-	private Animation up, down, left, right, sprite, explosion;
+	private Animation explosion;
 	private float posY = 0;
 	private float posX = 0;
 	private boolean blocked[][];
 
 	private Bullet bulletList[];
 	private Enemy enemyList[];
+	private Image upTank;
+	private Image leftTank;
+	private Image downTank;
+	private Image rightTank;
+	private Image player;
 
 
 	/**
@@ -83,9 +89,13 @@ public class JTank extends BasicGame {
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
 
+		/* Rendering map on the screen */
 		map.render(mapPosX, mapPosY);
-		sprite.draw((int) posX, (int) posY);
+		
+		/* Rendering player on the screen */
+		player.draw((int) posX, (int) posY);
 
+		/* Rendering bullets on the screen */
 		for (int i = 0; i < bulletList.length; i++) {
 			Bullet bullet = bulletList[i];
 			if (bullet != null) {
@@ -93,6 +103,8 @@ public class JTank extends BasicGame {
 			}
 			
 		}
+		
+		/* Rendering enemies on the screen */
 		for (int i = 0; i < enemyList.length; i++) {
 			Enemy enemy = enemyList[i];
 			if (enemy != null) {
@@ -105,34 +117,23 @@ public class JTank extends BasicGame {
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		
-		
-
-		map = new TMap("./resources/one.tmx");
-		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];
-		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME];
-		for ( int i = 0; i < enemyList.length; i++)
+		map = new TMap("./resources/one.tmx");						// Initializing the map.
+		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];		// Initializing the list for tracking player bullets.
+		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME];			// Initializing the list for enemies.
+		for ( int i = 0; i < enemyList.length; i++)					// Creating enemies and adding them to the list.
 		{
 			int posX = map.getValidPos()[0];
 			int posY = map.getValidPos()[1];
 			enemyList[i] = new Enemy(posX, posY, map);
 		}
-		SpriteSheet upTankSheet = new SpriteSheet("resources/upTank.jpg",
-				TILEWIDTH, TILEHEIGHT);
-		SpriteSheet rightTankSheet = new SpriteSheet("resources/rightTank.jpg",
-				TILEWIDTH, TILEHEIGHT);
-		SpriteSheet leftTankSheet = new SpriteSheet("resources/leftTank.jpg",
-				TILEWIDTH, TILEHEIGHT);
-		SpriteSheet downTankSheet = new SpriteSheet("resources/downTank.jpg",
-				TILEWIDTH, TILEHEIGHT);
+		upTank = new Image("resources/upTank.jpg");
+		rightTank = new Image("resources/rightTank.jpg");
+		leftTank = new Image("resources/leftTank.jpg");
+		downTank = new Image("resources/downTank.jpg");
 
 		
 
-		up = new Animation(upTankSheet, 300);
-		right = new Animation(rightTankSheet, 300);
-		left = new Animation(leftTankSheet, 300);
-		down = new Animation(downTankSheet, 300);
-		sprite = up;
+		player = upTank;
 		tankDirection = Direction.UP;
 		posX = 0;
 		posY = HEIGHT - TILEHEIGHT;
@@ -147,37 +148,33 @@ public class JTank extends BasicGame {
 		/* Key press handling code */
 
 		if (input.isKeyDown(Input.KEY_UP)) {
-			sprite = up;
+			player = upTank;
 			tankDirection = Direction.UP;
 			if (!isBlocked(posX, posY - SPEED)) {
 				posY -= SPEED;
-				sprite.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_DOWN)) {
 
-			sprite = down;
+			player = downTank;
 			tankDirection = Direction.DOWN;
 			if (!isBlocked(posX, posY + SPEED)) {
 				posY += SPEED;
-				sprite.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_RIGHT)) {
-			sprite = right;
+			player = rightTank;
 			tankDirection = Direction.RIGHT;
 			if (!isBlocked(posX + SPEED, posY)) {
 				posX = posX + SPEED;
-				sprite.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_LEFT)) {
 
-			sprite = left;
+			player = leftTank;
 			tankDirection = Direction.LEFT;
 			if (!isBlocked(posX - SPEED, posY)) {
 				posX -= SPEED;
-				sprite.update(delta);
 			}
 		} else if (input.isKeyPressed(Input.KEY_SPACE)) {
 			for (int i = 0; i < bulletList.length; i++) {
