@@ -25,8 +25,10 @@ public class Enemy {
 	private int posX;
 	private int posY;
 	private Image up, down, left, right, enemy;
+	private int health;
 	private TMap map;
-	private int life;
+	private TankType tankType;
+	public static enum TankType {Cobra,SharpShooter,Houdini,BlackMamba};
 
 	private Direction direc;
 	private Random random;
@@ -44,7 +46,8 @@ public class Enemy {
 			this.down = new Image("resources/images/downTank.jpg");
 			this.left = new Image("resources/images/leftTank.jpg");
 			this.right = new Image("resources/images/rightTank.jpg");
-			life = TANK_LIFE;
+			health = TANK_LIFE;
+			tankType = TankType.Cobra;
 			break;
 		case 1:
 			this.up = new Image("resources/images/upSharpShooter.png");
@@ -52,7 +55,8 @@ public class Enemy {
 			this.left = new Image("resources/images/leftSharpShooter.png");
 			this.right = new Image("resources/images/rightSharpShooter.png");
 			speed = 2;
-			life = SHARP_SHOOTER_LIFE;
+			health = SHARP_SHOOTER_LIFE;
+			tankType = TankType.SharpShooter;
 			break;
 		case 2:
 		case 3:
@@ -61,7 +65,8 @@ public class Enemy {
 			this.left = new Image("resources/images/leftHoudini.png");
 			this.right = new Image("resources/images/rightHoudini.png");
 			speed = 4;
-			life = HOUDINI_LIFE;
+			health = HOUDINI_LIFE;
+			tankType = TankType.Houdini;
 			break;
 		}
 	}
@@ -111,22 +116,42 @@ public class Enemy {
 		this.posY = posY;
 	}
 
+	/**
+	 * @return the life
+	 */
+	public int getHealth() {
+		return health;
+	}
+
+	/**
+	 * @param life
+	 *            the life to set
+	 */
+	public void setHealth(int life) {
+		this.health = life;
+	}
+
 	public void render() {
-		switch (direc) {
-		case UP:
-			enemy = up;
-			break;
-		case DOWN:
-			enemy = down;
-			break;
-		case LEFT:
-			enemy = left;
-			break;
-		case RIGHT:
-			enemy = right;
-			break;
+		if (this.health > 0) {
+			switch (direc) {
+			case UP:
+				enemy = up;
+				break;
+			case DOWN:
+				enemy = down;
+				break;
+			case LEFT:
+				enemy = left;
+				break;
+			case RIGHT:
+				enemy = right;
+				break;
+			}
+			enemy.draw(posX, posY);
+		} else {
+			
+
 		}
-		enemy.draw(posX, posY);
 	}
 
 	public void update() {
@@ -202,4 +227,15 @@ public class Enemy {
 		return collided;
 	}
 
+	public boolean isHit(float posX, float posY) {
+		boolean isHit = false;
+		Rectangle playerBounds = new Rectangle((int) this.posX,
+				(int) this.posY, JTank.SIZE, JTank.SIZE);
+		Rectangle bulletBounds = new Rectangle((int) posX, (int) posY,
+				JTank.SIZE, JTank.SIZE);
+		if (playerBounds.intersects(bulletBounds)) {
+			isHit = true;
+		}
+		return isHit;
+	}
 }

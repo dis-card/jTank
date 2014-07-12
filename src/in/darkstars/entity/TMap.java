@@ -109,7 +109,15 @@ public class TMap extends TiledMap {
 	
 	public int[] getValidPos()
 	{
-		Rectangle rec =  freePathList.get(random.nextInt(freePathList.size()));
+		boolean valid = false;
+		Rectangle rec = null;
+		while (!valid)
+		{
+			rec =  freePathList.get(random.nextInt(freePathList.size()));
+			if (!inCollision(rec))
+				valid = true;
+			
+		}
 		return new int[] {(int)rec.getX(),(int)rec.getY()};
 		
 	}

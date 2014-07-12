@@ -56,7 +56,6 @@ public class JTank extends BasicGame {
 	private Image rightTank;
 	private Image player;
 
-
 	/**
 	 * @param title
 	 */
@@ -88,8 +87,8 @@ public class JTank extends BasicGame {
 			throws SlickException {
 
 		/* Rendering map on the screen */
-		map.render(mapPosX, mapPosY,0);
-		
+		map.render(mapPosX, mapPosY, 0);
+
 		/* Rendering player on the screen */
 		player.draw((int) posX, (int) posY);
 
@@ -97,29 +96,35 @@ public class JTank extends BasicGame {
 		for (int i = 0; i < bulletList.length; i++) {
 			Bullet bullet = bulletList[i];
 			if (bullet != null) {
-				bullet.render(g);			
+				bullet.render(g);
 			}
-			
+
 		}
-		
+
 		/* Rendering enemies on the screen */
 		for (int i = 0; i < enemyList.length; i++) {
 			Enemy enemy = enemyList[i];
 			if (enemy != null) {
-				enemy.render();			
+				enemy.render();
 			}
-			
+
 		}
-		map.render(mapPosX, mapPosY,1);
+		map.render(mapPosX, mapPosY, 1);
 
 	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		map = new TMap("resources/maps/newOne.tmx");						// Initializing the map.
-		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME];		// Initializing the list for tracking player bullets.
-		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME];			// Initializing the list for enemies.
-		for ( int i = 0; i < enemyList.length; i++)					// Creating enemies and adding them to the list.
+		map = new TMap("resources/maps/newOne.tmx"); // Initializing the map.
+		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME]; // Initializing
+																// the list for
+																// tracking
+																// player
+																// bullets.
+		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME]; // Initializing the
+															// list for enemies.
+		for (int i = 0; i < enemyList.length; i++) // Creating enemies and
+													// adding them to the list.
 		{
 			int posX = map.getValidPos()[0];
 			int posY = map.getValidPos()[1];
@@ -129,8 +134,6 @@ public class JTank extends BasicGame {
 		rightTank = new Image("resources/images/rightTank.jpg");
 		leftTank = new Image("resources/images/leftTank.jpg");
 		downTank = new Image("resources/images/downTank.jpg");
-
-		
 
 		player = upTank;
 		tankDirection = Direction.UP;
@@ -204,39 +207,59 @@ public class JTank extends BasicGame {
 
 			System.exit(statusCode);
 		}
-		
 
 		/* Code to update bullets */
 		for (int i = 0; i < bulletList.length; i++) {
 			Bullet bullet = bulletList[i];
 			if (bullet != null) {
-				if (bullet.isOutOfScreen() || ( bullet.isExploded() && bullet.getExplosion().isStopped() ))
-				{
+				if (bullet.isOutOfScreen()
+						|| (bullet.isExploded() && bullet.getExplosion()
+								.isStopped())) {
 					bulletList[i] = null;
-				}
-				else if (map.inCollision(new Rectangle((int) bullet.getPosX(), (int) bullet.getPosY(), Bullet.WIDTH, Bullet.HEIGHT)))
-				{
-						bullet.setExploded(true);			
-						bullet.getExplosion().update(delta);
-				}
-				else
-				{
+				} else if (map.inCollision(new Rectangle(
+						(int) bullet.getPosX(), (int) bullet.getPosY(),
+						Bullet.WIDTH, Bullet.HEIGHT))) {
+					bullet.setExploded(true);
+					bullet.getExplosion().update(delta);
+				}else {
 					bullet.update();
 				}
-				
-			}
-		}
-		
-		/* Code to update the enemies */
-		for ( int i = 0; i < enemyList.length; i++)
-		{
-			Enemy enemy = enemyList[i];
-			if ( enemy != null )
-			{
-				enemy.update();
+
 			}
 		}
 
+		/* Code to update the enemies */
+		for (int i = 0; i < enemyList.length; i++) {
+			Enemy enemy = enemyList[i];
+			if (enemy != null && enemy.getHealth() > 0) {
+				enemy.update();
+			}
+			else
+			{
+				int posX = map.getValidPos()[0];
+				int posY = map.getValidPos()[1];
+				enemyList[i] = new Enemy(posX, posY, map);
+			}
+		}
+
+		for (int i = 0; i < bulletList.length; i++) {
+			Bullet bullet = bulletList[i];
+			if (bullet == null)
+				continue;
+			else {
+				for (int j = 0; j < enemyList.length; j++) {
+					Enemy enemy = enemyList[j];
+					if ( enemy != null )
+					{
+						if ( enemy.isHit(bullet.getPosX(),bullet.getPosY()) )
+						{
+							enemy.setHealth(enemy.getHealth() - 1);
+							bullet.setExploded(true);
+						} 
+					}
+				}
+			}
+		}
 	}
 
 	private boolean isBlocked(float x, float y) {
