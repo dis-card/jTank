@@ -33,7 +33,9 @@ public class Enemy {
 	private float speed = 1f;
 	private int posX;
 	private int posY;
-	private Animation up, down, left, right, enemy, spawn;
+	private Animation up, down, left, right, enemy, spawn, shield;
+	private double timeElapsed;
+
 	private int health;
 	private TMap map;
 	private CodeName codeName;
@@ -41,27 +43,22 @@ public class Enemy {
 	public static enum CodeName {
 		Tango, Alpha, Mamba, Python, Sweeper, Houdini, SharpShooter, Cobra
 	};
-	public static final float TANGO_SPEED = 1f,
-								ALPHA_SPEED = 1f,
-								MAMBA_SPEED = 1f,
-								PYTHON_SPEED = 1f,
-								SWEEPER_SPEED = 1f,
-								HOUDINI_SPEED = 2f,
-								SHARP_SHOOTER_SPEED = 1f,
-								COBRA_SPEED = 1f;
-								
+
+	public static final float TANGO_SPEED = 1f, ALPHA_SPEED = 1f,
+			MAMBA_SPEED = 1f, PYTHON_SPEED = 1f, SWEEPER_SPEED = 1f,
+			HOUDINI_SPEED = 2f, SHARP_SHOOTER_SPEED = 1f, COBRA_SPEED = 1f;
 
 	private Bullet[] bulletList;
 
 	private Direction direc;
 	private Random random;
+	private double shieldTime = 5000;
 
 	public Enemy(int posX, int posY, TMap map) throws SlickException {
 
 		this.posX = posX;
 		this.posY = posY;
 		this.map = map;
-		this.direc = Direction.DOWN;
 		bulletList = new Bullet[5];
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();
 		this.random = new Random();
@@ -202,6 +199,8 @@ public class Enemy {
 			this.codeName = CodeName.Cobra;
 			break;
 		}
+		this.direc = Direction.DOWN;
+		enemy = down;
 		spawn = new Animation(new Image[] {
 				jTankSpriteSheet.getSubImage(16, 6),
 				jTankSpriteSheet.getSubImage(17, 6),
@@ -210,14 +209,16 @@ public class Enemy {
 				jTankSpriteSheet.getSubImage(19, 6),
 				jTankSpriteSheet.getSubImage(18, 6),
 				jTankSpriteSheet.getSubImage(17, 6),
-				jTankSpriteSheet.getSubImage(16, 6)
-				}, ANIMATION_DELAY);
+				jTankSpriteSheet.getSubImage(16, 6) }, ANIMATION_DELAY);
 		spawn.setLooping(false);
 		spawn.draw(posX, posY);
+		shield = new Animation(new Image[] {
+				jTankSpriteSheet.getSubImage(16, 9),
+				jTankSpriteSheet.getSubImage(16, 10) }, 1);
+		shield.draw(posX, posY);
 
 	}
 
-	
 	public void render() {
 		if (!spawn.isStopped()) {
 			spawn.draw(posX, posY);
@@ -237,15 +238,20 @@ public class Enemy {
 				break;
 			}
 			enemy.draw(posX, posY);
-		} 
+			if (!(timeElapsed > shieldTime )) {
+				shield.draw(posX, posY);
+			}
+		}
 	}
 
-	public void update( long delta ) {
+	public void update(long delta) {
+		timeElapsed += delta;
 		if (spawn.isStopped()) {
 			switch (direc) {
 			case UP:
 				if (!inCollision(posX, posY - speed)) {
 					posY -= speed;
+					enemy.update(delta);
 				} else {
 					changeDirection();
 				}
@@ -253,6 +259,7 @@ public class Enemy {
 			case DOWN:
 				if (!inCollision(posX, posY + speed)) {
 					posY += speed;
+					enemy.update(delta);
 				} else {
 					changeDirection();
 				}
@@ -260,6 +267,7 @@ public class Enemy {
 			case LEFT:
 				if (!inCollision(posX - speed, posY)) {
 					posX -= speed;
+					enemy.update(delta);
 				} else {
 					changeDirection();
 				}
@@ -267,6 +275,7 @@ public class Enemy {
 			case RIGHT:
 				if (!inCollision(posX + speed, posY)) {
 					posX += speed;
+					enemy.update(delta);
 				} else {
 					changeDirection();
 				}
@@ -326,7 +335,7 @@ public class Enemy {
 		}
 		return isHit;
 	}
-	
+
 	/**
 	 * @return the spawn
 	 */
@@ -363,13 +372,11 @@ public class Enemy {
 		return posX;
 	}
 
-
 	/**
 	 * @return the posY
 	 */
 	public float getPosY() {
 		return posY;
 	}
-
 
 }

@@ -53,6 +53,7 @@ public class JTank extends BasicGame {
 	private Bullet bulletList[];
 	private Enemy enemyList[];
 	private Animation upTank, leftTank,	downTank, rightTank, player;
+	private long score;
 
 	/**
 	 * @param title
@@ -108,6 +109,7 @@ public class JTank extends BasicGame {
 
 		}
 		map.render(mapPosX, mapPosY, 1);
+		g.drawString("Score "+Long.toString(score), 90, 10);
 
 	}
 
@@ -244,12 +246,14 @@ public class JTank extends BasicGame {
 			}
 			else
 			{
+				score++;
 				int posX = map.getValidPos()[0];
 				int posY = map.getValidPos()[1];
 				enemyList[i] = new Enemy(posX, posY, map);
 			}
 		}
-
+		
+		/* Code to update the health and bullet explosion when enemy is hit by a bullet*/
 		for (int i = 0; i < bulletList.length; i++) {
 			Bullet bullet = bulletList[i];
 			if (bullet == null || bullet.isExploded())
