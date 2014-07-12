@@ -1,7 +1,7 @@
 package in.darkstars.entity;
 
-import java.awt.Rectangle;
-
+import in.darkstars.helper.SoundFactory;
+import in.darkstars.helper.SoundFactory.SoundType;
 import in.darkstars.helper.SpriteSheetFactory;
 import in.darkstars.main.JTank;
 import in.darkstars.main.JTank.Direction;
@@ -10,6 +10,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -29,6 +30,7 @@ public class Bullet {
 	private Direction bulletDirection;
 	private Animation explosion;
 	private boolean positionAdjusted;
+	private Sound hitSound, firedSound;
 
 	public Bullet(float x, float y, Direction tankDirection)
 			throws SlickException {
@@ -36,6 +38,8 @@ public class Bullet {
 		this.posY = y;
 		this.bulletDirection = tankDirection;
 		this.velocity = 5;
+		this.hitSound = SoundFactory.getSound(SoundType.BulletHit);
+		this.firedSound = SoundFactory.getSound(SoundType.BulletFired);
 		init();
 	}
 
@@ -87,6 +91,17 @@ public class Bullet {
 			this.explosion.draw(posX, posY);
 		}
 	}
+	
+	public void makeFiredSound() throws SlickException
+	{
+		firedSound.play();
+	}
+	
+	public void makeHitSound() throws SlickException
+	{
+		hitSound.play();
+	}
+	
 
 	public boolean isOutOfScreen() {
 		if (posX > JTank.WIDTH || posX < 0 || posY > JTank.HEIGHT || posY < 0)

@@ -195,18 +195,22 @@ public class JTank extends BasicGame {
 					case UP:
 						bulletList[i] = new Bullet(posX + SIZE / 2, posY,
 								tankDirection);
+						bulletList[i].makeFiredSound();
 						break;
 					case DOWN:
 						bulletList[i] = new Bullet(posX + SIZE / 2,
 								posY + SIZE, tankDirection);
+						bulletList[i].makeFiredSound();
 						break;
 					case RIGHT:
 						bulletList[i] = new Bullet(posX + SIZE,
 								posY + SIZE / 2, tankDirection);
+						bulletList[i].makeFiredSound();
 						break;
 					case LEFT:
 						bulletList[i] = new Bullet(posX, posY + SIZE / 2,
 								tankDirection);
+						bulletList[i].makeFiredSound();
 						break;
 					}
 					break;
@@ -229,6 +233,7 @@ public class JTank extends BasicGame {
 				} else if (map.inCollision(new Rectangle(
 						(int) bullet.getPosX(), (int) bullet.getPosY(),
 						Bullet.WIDTH, Bullet.HEIGHT))) {
+//					bullet.makeHitSound();
 					bullet.setExploded(true);
 					bullet.getExplosion().update(delta);
 				}else {
@@ -246,6 +251,7 @@ public class JTank extends BasicGame {
 			}
 			else
 			{
+				enemy.makeDestroyedSound();
 				score++;
 				int posX = map.getValidPos()[0];
 				int posY = map.getValidPos()[1];

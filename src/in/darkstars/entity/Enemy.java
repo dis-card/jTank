@@ -1,6 +1,9 @@
 package in.darkstars.entity;
 
+import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 import in.darkstars.helper.Helper;
+import in.darkstars.helper.SoundFactory;
+import in.darkstars.helper.SoundFactory.SoundType;
 import in.darkstars.helper.SpriteSheetFactory;
 import in.darkstars.main.JTank;
 import in.darkstars.main.JTank.Direction;
@@ -11,8 +14,8 @@ import java.util.Random;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
-import static in.darkstars.helper.Helper.*;
 
 /**
  * @author dis-card
@@ -35,6 +38,7 @@ public class Enemy {
 	private int posY;
 	private Animation up, down, left, right, enemy, spawn, shield;
 	private double timeElapsed;
+	private Sound destroyed;
 
 	private int health;
 	private TMap map;
@@ -59,6 +63,7 @@ public class Enemy {
 		this.posX = posX;
 		this.posY = posY;
 		this.map = map;
+		this.destroyed = SoundFactory.getSound(SoundType.Explosion);
 		bulletList = new Bullet[5];
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();
 		this.random = new Random();
@@ -283,6 +288,11 @@ public class Enemy {
 			}
 		}
 
+	}
+	
+	public void makeDestroyedSound()
+	{
+		destroyed.play();
 	}
 
 	/**
