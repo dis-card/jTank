@@ -39,7 +39,7 @@ public class JTank extends BasicGame {
 	private static final int TILEWIDTH = 16;
 	private static final int TILEHEIGHT = 16;
 	public static final int SIZE = 16;
-	private static final float SPEED = 4;
+	private static final float SPEED = 3f;
 	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 10;
 	private Direction tankDirection;
 
@@ -158,6 +158,7 @@ public class JTank extends BasicGame {
 			tankDirection = Direction.UP;
 			if (!isBlocked(posX, posY - SPEED)) {
 				posY -= SPEED;
+				player.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_DOWN)) {
@@ -166,13 +167,15 @@ public class JTank extends BasicGame {
 			tankDirection = Direction.DOWN;
 			if (!isBlocked(posX, posY + SPEED)) {
 				posY += SPEED;
+				player.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_RIGHT)) {
 			player = rightTank;
 			tankDirection = Direction.RIGHT;
 			if (!isBlocked(posX + SPEED, posY)) {
-				posX = posX + SPEED;
+				posX += SPEED;
+				player.update(delta);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_LEFT)) {
@@ -181,6 +184,7 @@ public class JTank extends BasicGame {
 			tankDirection = Direction.LEFT;
 			if (!isBlocked(posX - SPEED, posY)) {
 				posX -= SPEED;
+				player.update(delta);
 			}
 		} else if (input.isKeyPressed(Input.KEY_SPACE)) {
 			for (int i = 0; i < bulletList.length; i++) {
@@ -211,7 +215,6 @@ public class JTank extends BasicGame {
 
 			System.exit(statusCode);
 		}
-		player.update(delta);
 
 		/* Code to update bullets */
 		for (int i = 0; i < bulletList.length; i++) {
@@ -237,7 +240,7 @@ public class JTank extends BasicGame {
 		for (int i = 0; i < enemyList.length; i++) {
 			Enemy enemy = enemyList[i];
 			if (enemy != null && enemy.getHealth() > 0 ) {
-				enemy.update();
+				enemy.update(delta);
 			}
 			else
 			{

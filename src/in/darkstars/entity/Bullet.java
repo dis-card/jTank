@@ -45,6 +45,56 @@ public class Bullet {
 		explosion = new Animation(new Image[] {jTankSpriteSheet.getSubImage(16, 8),jTankSpriteSheet.getSubImage(17, 8),jTankSpriteSheet.getSubImage(18, 8)}, 100);
 		explosion.setLooping(false);
 	}
+	public void update() {
+		if (!exploded) {
+			switch (bulletDirection) {
+			case UP:
+				posY -= velocity;
+				break;
+			case DOWN:
+				posY += velocity;
+				break;
+			case LEFT:
+				posX -= velocity;
+				break;
+			case RIGHT:
+				posX += velocity;
+				break;
+			}
+		}
+
+	}
+
+	public void render(Graphics g) {
+
+		if (!exploded) {	
+			g.drawOval(posX, posY, WIDTH, HEIGHT);
+		} else {
+			if (!positionAdjusted) {
+				switch (bulletDirection) {
+				case UP:
+				case DOWN:
+					posX -= JTank.SIZE / 2;
+					break;
+				case LEFT:
+				case RIGHT:
+					posY -= JTank.SIZE / 2;
+					break;
+
+				}
+				positionAdjusted = true;
+			}
+			this.explosion.draw(posX, posY);
+		}
+	}
+
+	public boolean isOutOfScreen() {
+		if (posX > JTank.WIDTH || posX < 0 || posY > JTank.HEIGHT || posY < 0)
+			return true;
+		else
+			return false;
+	}	
+	
 
 	/**
 	 * @return the exploded
@@ -121,56 +171,6 @@ public class Bullet {
 		this.velocity = velocity;
 	}
 
-	public void update() {
-		if (!exploded) {
-		}
 
-	}
-
-	public void render(Graphics g) {
-
-		if (!exploded) {
-			switch (bulletDirection) {
-			case UP:
-				posY -= velocity;
-				break;
-			case DOWN:
-				posY += velocity;
-				break;
-			case LEFT:
-				posX -= velocity;
-				break;
-			case RIGHT:
-				posX += velocity;
-				break;
-			}
-	
-			g.drawOval(posX, posY, WIDTH, HEIGHT);
-		} else {
-			if (!positionAdjusted) {
-				switch (bulletDirection) {
-				case UP:
-				case DOWN:
-					posX -= JTank.SIZE / 2;
-					positionAdjusted = true;
-					break;
-				case LEFT:
-				case RIGHT:
-					posY -= JTank.SIZE / 2;
-					positionAdjusted = true;
-					break;
-
-				}
-			}
-			this.explosion.draw(posX, posY);
-		}
-	}
-
-	public boolean isOutOfScreen() {
-		if (posX > JTank.WIDTH || posX < 0 || posY > JTank.HEIGHT || posY < 0)
-			return true;
-		else
-			return false;
-	}
 
 }

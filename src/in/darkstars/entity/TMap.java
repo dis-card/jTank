@@ -34,40 +34,7 @@ public class TMap extends TiledMap {
 	}
 	
 	
-	/**
-	 * @return the obstaclesList
-	 */
-	public ArrayList<Rectangle> getObstaclesList() {
-		return obstaclesList;
-	}
-
-
-
-	/**
-	 * @param obstaclesList the obstaclesList to set
-	 */
-	public void setObstaclesList(ArrayList<Rectangle> obstaclesList) {
-		this.obstaclesList = obstaclesList;
-	}
-
-
-
-	/**
-	 * @return the blocked
-	 */
-	public boolean[][] getBlocked() {
-		return blocked;
-	}
-
-
-
-	/**
-	 * @param blocked the blocked to set
-	 */
-	public void setBlocked(boolean[][] blocked) {
-		this.blocked = blocked;
-	}
-
+	
 
 
 	private void init()
@@ -144,4 +111,39 @@ public class TMap extends TiledMap {
 		return new int[] {(int)rec.getX(),(int)rec.getY()};
 		
 	}
+	
+	/**
+	 * @return the obstaclesList
+	 */
+	public ArrayList<Rectangle> getObstaclesList() {
+		return obstaclesList;
+	}
+
+
+
+	/**
+	 * @param obstaclesList the obstaclesList to set
+	 */
+	public void setObstaclesList(ArrayList<Rectangle> obstaclesList) {
+		this.obstaclesList = obstaclesList;
+	}
+
+
+
+	/**
+	 * @return the blocked
+	 */
+	public boolean[][] getBlocked() {
+		return blocked;
+	}
+
+
+
+	/**
+	 * @param blocked the blocked to set
+	 */
+	public void setBlocked(boolean[][] blocked) {
+		this.blocked = blocked;
+	}
+
 }

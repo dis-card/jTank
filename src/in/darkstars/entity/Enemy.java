@@ -30,7 +30,7 @@ public class Enemy {
 	private static final int HOUDINI_LIFE = 8;
 	private static final int SHARP_SHOOTER_LIFE = 9;
 	private static final int COBRA_LIFE = 10;
-	private float speed = 1;
+	private float speed = 1f;
 	private int posX;
 	private int posY;
 	private Animation up, down, left, right, enemy, spawn;
@@ -41,6 +41,15 @@ public class Enemy {
 	public static enum CodeName {
 		Tango, Alpha, Mamba, Python, Sweeper, Houdini, SharpShooter, Cobra
 	};
+	public static final float TANGO_SPEED = 1f,
+								ALPHA_SPEED = 1f,
+								MAMBA_SPEED = 1f,
+								PYTHON_SPEED = 1f,
+								SWEEPER_SPEED = 1f,
+								HOUDINI_SPEED = 2f,
+								SHARP_SHOOTER_SPEED = 1f,
+								COBRA_SPEED = 1f;
+								
 
 	private Bullet[] bulletList;
 
@@ -86,7 +95,7 @@ public class Enemy {
 			this.right = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(14, 1),
 					jTankSpriteSheet.getSubImage(15, 1) }, ANIMATION_DELAY);
-			this.speed = 1;
+			this.speed = ALPHA_SPEED;
 			this.health = ALPHA_LIFE;
 			this.codeName = CodeName.Alpha;
 			break;
@@ -103,7 +112,7 @@ public class Enemy {
 			this.right = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(14, 2),
 					jTankSpriteSheet.getSubImage(15, 2) }, ANIMATION_DELAY);
-			this.speed = 1;
+			this.speed = MAMBA_SPEED;
 			this.health = MAMBA_LIFE;
 			this.codeName = CodeName.Mamba;
 			break;
@@ -120,7 +129,7 @@ public class Enemy {
 			this.right = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(14, 3),
 					jTankSpriteSheet.getSubImage(15, 3) }, ANIMATION_DELAY);
-			this.speed = 2;
+			this.speed = PYTHON_SPEED;
 			this.health = PYTHON_LIFE;
 			this.codeName = CodeName.Python;
 			break;
@@ -137,7 +146,7 @@ public class Enemy {
 			this.right = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(14, 4),
 					jTankSpriteSheet.getSubImage(15, 4) }, ANIMATION_DELAY);
-			this.speed = 2;
+			this.speed = SWEEPER_SPEED;
 			this.health = SWEEPER_LIFE;
 			this.codeName = CodeName.Sweeper;
 			break;
@@ -154,7 +163,7 @@ public class Enemy {
 			this.right = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(14, 5),
 					jTankSpriteSheet.getSubImage(15, 5) }, ANIMATION_DELAY);
-			this.speed = 3;
+			this.speed = HOUDINI_SPEED;
 			this.health = HOUDINI_LIFE;
 			this.codeName = CodeName.Houdini;
 			break;
@@ -171,7 +180,7 @@ public class Enemy {
 			this.right = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(14, 6),
 					jTankSpriteSheet.getSubImage(15, 6) }, ANIMATION_DELAY);
-			this.speed = 2;
+			this.speed = SHARP_SHOOTER_SPEED;
 			this.health = SHARP_SHOOTER_LIFE;
 			this.codeName = CodeName.SharpShooter;
 			break;
@@ -188,7 +197,7 @@ public class Enemy {
 			this.right = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(14, 7),
 					jTankSpriteSheet.getSubImage(15, 7) }, ANIMATION_DELAY);
-			this.speed = 1;
+			this.speed = COBRA_SPEED;
 			this.health = COBRA_LIFE;
 			this.codeName = CodeName.Cobra;
 			break;
@@ -208,81 +217,7 @@ public class Enemy {
 
 	}
 
-	/**
-	 * @return the spawn
-	 */
-	public Animation getSpawn() {
-		return spawn;
-	}
-
-	/**
-	 * @param spawn
-	 *            the spawn to set
-	 */
-	public void setSpawn(Animation spawn) {
-		this.spawn = spawn;
-	}
-
-	/**
-	 * @return the direc
-	 */
-	public Direction getDirec() {
-		return direc;
-	}
-
-	/**
-	 * @param direc
-	 *            the direc to set
-	 */
-	public void setDirec(Direction direc) {
-		this.direc = direc;
-	}
-
-	/**
-	 * @return the life
-	 */
-	public int getHealth() {
-		return health;
-	}
-
-	/**
-	 * @param life
-	 *            the life to set
-	 */
-	public void setHealth(int life) {
-		this.health = life;
-	}
-
-	/**
-	 * @return the posX
-	 */
-	public float getPosX() {
-		return posX;
-	}
-
-	/**
-	 * @param posX
-	 *            the posX to set
-	 */
-	public void setPosX(int posX) {
-		this.posX = posX;
-	}
-
-	/**
-	 * @return the posY
-	 */
-	public float getPosY() {
-		return posY;
-	}
-
-	/**
-	 * @param posY
-	 *            the posY to set
-	 */
-	public void setPosY(int posY) {
-		this.posY = posY;
-	}
-
+	
 	public void render() {
 		if (!spawn.isStopped()) {
 			spawn.draw(posX, posY);
@@ -302,12 +237,10 @@ public class Enemy {
 				break;
 			}
 			enemy.draw(posX, posY);
-		} else {
-
-		}
+		} 
 	}
 
-	public void update() {
+	public void update( long delta ) {
 		if (spawn.isStopped()) {
 			switch (direc) {
 			case UP:
@@ -393,4 +326,50 @@ public class Enemy {
 		}
 		return isHit;
 	}
+	
+	/**
+	 * @return the spawn
+	 */
+	public Animation getSpawn() {
+		return spawn;
+	}
+
+	/**
+	 * @return the direc
+	 */
+	public Direction getDirec() {
+		return direc;
+	}
+
+	/**
+	 * @return the life
+	 */
+	public int getHealth() {
+		return health;
+	}
+
+	/**
+	 * @param life
+	 *            the life to set
+	 */
+	public void setHealth(int life) {
+		this.health = life;
+	}
+
+	/**
+	 * @return the posX
+	 */
+	public float getPosX() {
+		return posX;
+	}
+
+
+	/**
+	 * @return the posY
+	 */
+	public float getPosY() {
+		return posY;
+	}
+
+
 }
