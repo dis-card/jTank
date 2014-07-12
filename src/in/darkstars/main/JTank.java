@@ -18,6 +18,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.TiledMap;
+import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 
 /**
  * @author dis-card
@@ -133,10 +134,10 @@ public class JTank extends BasicGame {
 		Image leftTank [] = {jTankSpriteSheet.getSubImage(2, 0), jTankSpriteSheet.getSubImage(3, 0)};
 		Image downTank [] = {jTankSpriteSheet.getSubImage(4, 0), jTankSpriteSheet.getSubImage(5, 0)};
 		Image rightTank [] = {jTankSpriteSheet.getSubImage(6, 0), jTankSpriteSheet.getSubImage(7, 0)};
-		this.upTank = new Animation(upTank,100,false);
-		this.leftTank = new Animation(leftTank,100,false);
-		this.downTank = new Animation(downTank,100,false);
-		this.rightTank = new Animation(rightTank,100,false);
+		this.upTank = new Animation(upTank,ANIMATION_DELAY,false);
+		this.leftTank = new Animation(leftTank,ANIMATION_DELAY,false);
+		this.downTank = new Animation(downTank,ANIMATION_DELAY,false);
+		this.rightTank = new Animation(rightTank,ANIMATION_DELAY,false);
 
 		player = this.upTank;
 		tankDirection = Direction.UP;
@@ -210,6 +211,7 @@ public class JTank extends BasicGame {
 
 			System.exit(statusCode);
 		}
+		player.update(delta);
 
 		/* Code to update bullets */
 		for (int i = 0; i < bulletList.length; i++) {
@@ -234,7 +236,7 @@ public class JTank extends BasicGame {
 		/* Code to update the enemies */
 		for (int i = 0; i < enemyList.length; i++) {
 			Enemy enemy = enemyList[i];
-			if (enemy != null && enemy.getHealth() > 0) {
+			if (enemy != null && enemy.getHealth() > 0 ) {
 				enemy.update();
 			}
 			else
