@@ -3,6 +3,7 @@ package in.darkstars.main;
 import in.darkstars.entity.Bullet;
 import in.darkstars.entity.Enemy;
 import in.darkstars.entity.TMap;
+import in.darkstars.helper.SpriteSheetFactory;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -34,9 +35,9 @@ public class JTank extends BasicGame {
 	};
 
 	public static final int NUMBER_OF_BULLETS_PER_FRAME = 5;
-	private static final int TILEWIDTH = 32;
-	private static final int TILEHEIGHT = 32;
-	public static final int SIZE = 32;
+	private static final int TILEWIDTH = 16;
+	private static final int TILEHEIGHT = 16;
+	public static final int SIZE = 16;
 	private static final float SPEED = 4;
 	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 10;
 	private Direction tankDirection;
@@ -50,11 +51,7 @@ public class JTank extends BasicGame {
 
 	private Bullet bulletList[];
 	private Enemy enemyList[];
-	private Image upTank;
-	private Image leftTank;
-	private Image downTank;
-	private Image rightTank;
-	private Image player;
+	private Animation upTank, leftTank,	downTank, rightTank, player;
 
 	/**
 	 * @param title
@@ -115,7 +112,7 @@ public class JTank extends BasicGame {
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		map = new TMap("resources/maps/newOne.tmx"); // Initializing the map.
+		map = new TMap("resources/maps/newStageOne.tmx"); // Initializing the map.
 		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME]; // Initializing
 																// the list for
 																// tracking
@@ -130,12 +127,18 @@ public class JTank extends BasicGame {
 			int posY = map.getValidPos()[1];
 			enemyList[i] = new Enemy(posX, posY, map);
 		}
-		upTank = new Image("resources/images/upTank.jpg");
-		rightTank = new Image("resources/images/rightTank.jpg");
-		leftTank = new Image("resources/images/leftTank.jpg");
-		downTank = new Image("resources/images/downTank.jpg");
+		
+		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();				
+		Image upTank [] = {jTankSpriteSheet.getSubImage(0, 0), jTankSpriteSheet.getSubImage(1, 0)};
+		Image leftTank [] = {jTankSpriteSheet.getSubImage(2, 0), jTankSpriteSheet.getSubImage(3, 0)};
+		Image downTank [] = {jTankSpriteSheet.getSubImage(4, 0), jTankSpriteSheet.getSubImage(5, 0)};
+		Image rightTank [] = {jTankSpriteSheet.getSubImage(6, 0), jTankSpriteSheet.getSubImage(7, 0)};
+		this.upTank = new Animation(upTank,100,false);
+		this.leftTank = new Animation(leftTank,100,false);
+		this.downTank = new Animation(downTank,100,false);
+		this.rightTank = new Animation(rightTank,100,false);
 
-		player = upTank;
+		player = this.upTank;
 		tankDirection = Direction.UP;
 		posX = 0;
 		posY = HEIGHT - TILEHEIGHT;
@@ -244,7 +247,7 @@ public class JTank extends BasicGame {
 
 		for (int i = 0; i < bulletList.length; i++) {
 			Bullet bullet = bulletList[i];
-			if (bullet == null)
+			if (bullet == null || bullet.isExploded())
 				continue;
 			else {
 				for (int j = 0; j < enemyList.length; j++) {

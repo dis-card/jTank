@@ -1,6 +1,7 @@
 package in.darkstars.entity;
 
 import static in.darkstars.main.JTank.SIZE;
+import in.darkstars.helper.Helper;
 import in.darkstars.main.JTank;
 
 import java.awt.Rectangle;
@@ -109,6 +110,28 @@ public class TMap extends TiledMap {
 	
 	public int[] getValidPos()
 	{
+		/*
+		int coordinates [] = new int[2];
+		switch (Helper.getRandomNumber(3))
+		{
+		case 0:
+			coordinates[0] = 0;
+			coordinates[1] = 0;
+			break;
+		case 1:
+			coordinates[0] = JTank.WIDTH / 2;
+			coordinates[1] = 0; 
+			break;
+		case 2:
+			coordinates[0] = JTank.WIDTH - SIZE;
+			coordinates[1] = 0;
+			break;
+		}
+		
+		return coordinates;
+		*/
+		
+		// Tried to generate random co-ordinates but have some problem
 		boolean valid = false;
 		Rectangle rec = null;
 		while (!valid)

@@ -1,9 +1,13 @@
 package in.darkstars.helper;
 
-import in.darkstars.main.JTank;
+import static in.darkstars.main.JTank.HEIGHT;
+import static in.darkstars.main.JTank.SIZE;
+import static in.darkstars.main.JTank.WIDTH;
 
 import java.awt.Rectangle;
-import static in.darkstars.main.JTank.*;
+import java.util.Random;
+
+import org.newdawn.slick.SpriteSheet;
 
 /**
  * @author dis-card
@@ -13,6 +17,11 @@ import static in.darkstars.main.JTank.*;
  */
 public class Helper {
 	
+	public static final int TILE_WIDTH = 16;
+	public static final int TILE_HEIGHT = 16;
+	private static Random randomNumGenerator = new Random();
+	public static final String SPRITE_SHEET_PATH = "resources/maps/jTankSpriteSheet.png";
+	public static final int ANIMATION_DELAY = 100;
 	public static boolean isInCollision(Rectangle boundedBoxPlayer, Rectangle boundedBoxObject)
 	{
 		boolean collided = false;
@@ -26,6 +35,11 @@ public class Helper {
 		}
 		else
 			return false;
+	}
+	
+	public static int getRandomNumber( int maxLimit )
+	{
+		return randomNumGenerator.nextInt(maxLimit);
 	}
 
 }

@@ -2,11 +2,13 @@ package in.darkstars.entity;
 
 import java.awt.Rectangle;
 
+import in.darkstars.helper.SpriteSheetFactory;
 import in.darkstars.main.JTank;
 import in.darkstars.main.JTank.Direction;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
@@ -22,8 +24,8 @@ public class Bullet {
 	private float posY;
 	private float velocity;
 	private boolean exploded;
-	public static final int HEIGHT = 5;
-	public static final int WIDTH = 5;
+	public static final int HEIGHT = 3;
+	public static final int WIDTH = 3;
 	private Direction bulletDirection;
 	private Animation explosion;
 	private boolean positionAdjusted;
@@ -38,9 +40,9 @@ public class Bullet {
 	}
 
 	private void init() throws SlickException {
-		SpriteSheet explosionSheet = new SpriteSheet("resources/images/explosion.png",
-				36, 38);
-		explosion = new Animation(explosionSheet, 100);
+		
+		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();
+		explosion = new Animation(new Image[] {jTankSpriteSheet.getSubImage(16, 8),jTankSpriteSheet.getSubImage(17, 8),jTankSpriteSheet.getSubImage(18, 8)}, 100);
 		explosion.setLooping(false);
 	}
 

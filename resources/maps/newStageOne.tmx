@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="40" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="jTankSpriteSheet" tilewidth="16" tileheight="16">
+  <image source="jTankSpriteSheet.png" width="400" height="256"/>
+  <tile id="16">
+   <properties>
+    <property name="blocked" value="true"/>
+    <property name="breakable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="blocked" value="true"/>
+    <property name="breakable" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="background" width="50" height="40">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3XQQqAIBCFYa/gNTpI18hj5O0jSIjICB1n3shbfDsX8yeo5RBCJhK2AMwg0VBYzyLRUCSAuXobRu1LVGoY+b3ijfXeSTRYtewV3jqePV73Y7aOHuzAwg4s7MDCDj1f7+Ve7CBqt12k1s3c8XbW1rCDHV47ksMOyXt1ZEeZX+Md8Hc+xDcjEc2h9exsXYv2P3zOsCrNcgA3N8UvQB8AAA==
+  </data>
+ </layer>
+ <layer name="foreground" width="50" height="40">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3PsQkAMAwDQQ+X/WdK4wFSBYHuQL1+BgAAAIAGZ5fq9Z+OP3Rk0ZGlrQMAmlxBvEpIQB8AAA==
+  </data>
+ </layer>
+</map>
