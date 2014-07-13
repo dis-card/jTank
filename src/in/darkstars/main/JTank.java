@@ -3,6 +3,7 @@ package in.darkstars.main;
 import in.darkstars.entity.Bullet;
 import in.darkstars.entity.Enemy;
 import in.darkstars.entity.TMap;
+import in.darkstars.entity.tank.TankFactory;
 import in.darkstars.helper.SpriteSheetFactory;
 
 import java.awt.Rectangle;
@@ -18,6 +19,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.TiledMap;
+
 import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 
 /**
@@ -128,7 +130,8 @@ public class JTank extends BasicGame {
 		{
 			int posX = map.getValidPos()[0];
 			int posY = map.getValidPos()[1];
-			enemyList[i] = new Enemy(posX, posY, map);
+			enemyList[i] = TankFactory.getTank(posX, posY, map);
+			//enemyList[i].render();
 		}
 		
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();				
@@ -255,7 +258,7 @@ public class JTank extends BasicGame {
 				score++;
 				int posX = map.getValidPos()[0];
 				int posY = map.getValidPos()[1];
-				enemyList[i] = new Enemy(posX, posY, map);
+				enemyList[i] = TankFactory.getTank(posX, posY, map); 
 			}
 		}
 		

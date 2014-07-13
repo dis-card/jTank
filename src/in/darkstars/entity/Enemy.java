@@ -23,26 +23,20 @@ import org.newdawn.slick.SpriteSheet;
  *         Jul 11, 2014
  * 
  */
-public class Enemy {
+public abstract class Enemy {
 
-	private static final int TANGO_LIFE = 3;
-	private static final int ALPHA_LIFE = 4;
-	private static final int MAMBA_LIFE = 5;
-	private static final int PYTHON_LIFE = 6;
-	private static final int SWEEPER_LIFE = 7;
-	private static final int HOUDINI_LIFE = 8;
-	private static final int SHARP_SHOOTER_LIFE = 9;
-	private static final int COBRA_LIFE = 10;
-	private float speed = 1f;
-	private int posX;
-	private int posY;
-	private Animation up, down, left, right, enemy, spawn, shield;
+	protected float speed = 1f;
+	protected int posX;
+	protected int posY;
+	protected Animation up, down, left, right, enemy;
+	private Animation spawn;
+	private Animation shield;
 	private double timeElapsed;
 	private Sound destroyed;
 
-	private int health;
+	protected int health;
 	private TMap map;
-	private CodeName codeName;
+	protected CodeName codeName;
 
 	public static enum CodeName {
 		Tango, Alpha, Mamba, Python, Sweeper, Houdini, SharpShooter, Cobra
@@ -54,7 +48,7 @@ public class Enemy {
 
 	private Bullet[] bulletList;
 
-	private Direction direc;
+	protected Direction direc;
 	private Random random;
 	private double shieldTime = 5000;
 
@@ -67,145 +61,6 @@ public class Enemy {
 		bulletList = new Bullet[5];
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();
 		this.random = new Random();
-		switch (random.nextInt(8)) {
-		case 0:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 0),
-					jTankSpriteSheet.getSubImage(9, 0) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 0),
-					jTankSpriteSheet.getSubImage(11, 0) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 0),
-					jTankSpriteSheet.getSubImage(13, 0) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 0),
-					jTankSpriteSheet.getSubImage(15, 0) }, ANIMATION_DELAY);
-			this.health = TANGO_LIFE;
-			this.codeName = CodeName.Tango;
-			break;
-		case 1:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 1),
-					jTankSpriteSheet.getSubImage(9, 1) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 1),
-					jTankSpriteSheet.getSubImage(11, 1) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 1),
-					jTankSpriteSheet.getSubImage(13, 1) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 1),
-					jTankSpriteSheet.getSubImage(15, 1) }, ANIMATION_DELAY);
-			this.speed = ALPHA_SPEED;
-			this.health = ALPHA_LIFE;
-			this.codeName = CodeName.Alpha;
-			break;
-		case 2:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 2),
-					jTankSpriteSheet.getSubImage(9, 2) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 2),
-					jTankSpriteSheet.getSubImage(11, 2) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 2),
-					jTankSpriteSheet.getSubImage(13, 2) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 2),
-					jTankSpriteSheet.getSubImage(15, 2) }, ANIMATION_DELAY);
-			this.speed = MAMBA_SPEED;
-			this.health = MAMBA_LIFE;
-			this.codeName = CodeName.Mamba;
-			break;
-		case 3:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 3),
-					jTankSpriteSheet.getSubImage(9, 3) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 3),
-					jTankSpriteSheet.getSubImage(11, 3) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 3),
-					jTankSpriteSheet.getSubImage(13, 3) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 3),
-					jTankSpriteSheet.getSubImage(15, 3) }, ANIMATION_DELAY);
-			this.speed = PYTHON_SPEED;
-			this.health = PYTHON_LIFE;
-			this.codeName = CodeName.Python;
-			break;
-		case 4:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 4),
-					jTankSpriteSheet.getSubImage(9, 4) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 4),
-					jTankSpriteSheet.getSubImage(11, 4) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 4),
-					jTankSpriteSheet.getSubImage(13, 4) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 4),
-					jTankSpriteSheet.getSubImage(15, 4) }, ANIMATION_DELAY);
-			this.speed = SWEEPER_SPEED;
-			this.health = SWEEPER_LIFE;
-			this.codeName = CodeName.Sweeper;
-			break;
-		case 5:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 5),
-					jTankSpriteSheet.getSubImage(9, 5) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 5),
-					jTankSpriteSheet.getSubImage(11, 5) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 5),
-					jTankSpriteSheet.getSubImage(13, 5) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 5),
-					jTankSpriteSheet.getSubImage(15, 5) }, ANIMATION_DELAY);
-			this.speed = HOUDINI_SPEED;
-			this.health = HOUDINI_LIFE;
-			this.codeName = CodeName.Houdini;
-			break;
-		case 6:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 6),
-					jTankSpriteSheet.getSubImage(9, 6) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 6),
-					jTankSpriteSheet.getSubImage(11, 6) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 6),
-					jTankSpriteSheet.getSubImage(13, 6) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 6),
-					jTankSpriteSheet.getSubImage(15, 6) }, ANIMATION_DELAY);
-			this.speed = SHARP_SHOOTER_SPEED;
-			this.health = SHARP_SHOOTER_LIFE;
-			this.codeName = CodeName.SharpShooter;
-			break;
-		case 7:
-			this.up = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(8, 7),
-					jTankSpriteSheet.getSubImage(9, 7) }, ANIMATION_DELAY);
-			this.left = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(10, 7),
-					jTankSpriteSheet.getSubImage(11, 7) }, ANIMATION_DELAY);
-			this.down = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(12, 7),
-					jTankSpriteSheet.getSubImage(13, 7) }, ANIMATION_DELAY);
-			this.right = new Animation(new Image[] {
-					jTankSpriteSheet.getSubImage(14, 7),
-					jTankSpriteSheet.getSubImage(15, 7) }, ANIMATION_DELAY);
-			this.speed = COBRA_SPEED;
-			this.health = COBRA_LIFE;
-			this.codeName = CodeName.Cobra;
-			break;
-		}
-		this.direc = Direction.DOWN;
-		enemy = down;
 		spawn = new Animation(new Image[] {
 				jTankSpriteSheet.getSubImage(16, 6),
 				jTankSpriteSheet.getSubImage(17, 6),
@@ -217,6 +72,7 @@ public class Enemy {
 				jTankSpriteSheet.getSubImage(16, 6) }, ANIMATION_DELAY);
 		spawn.setLooping(false);
 		spawn.draw(posX, posY);
+		direc = Direction.DOWN;
 		shield = new Animation(new Image[] {
 				jTankSpriteSheet.getSubImage(16, 9),
 				jTankSpriteSheet.getSubImage(16, 10) }, 1);
@@ -243,13 +99,14 @@ public class Enemy {
 				break;
 			}
 			enemy.draw(posX, posY);
-			if (!(timeElapsed > shieldTime )) {
+			if (!(timeElapsed > shieldTime)) {
 				shield.draw(posX, posY);
 			}
 		}
 	}
 
 	public void update(long delta) {
+
 		timeElapsed += delta;
 		if (spawn.isStopped()) {
 			switch (direc) {
@@ -286,19 +143,18 @@ public class Enemy {
 				}
 				break;
 			}
-		}
 
+		}
 	}
-	
-	public void makeDestroyedSound()
-	{
+
+	public void makeDestroyedSound() {
 		destroyed.play();
 	}
 
 	/**
 	 * 
 	 */
-	private void changeDirection() {
+	protected void changeDirection() {
 
 		int randomDirec = random.nextInt(4);
 		switch (randomDirec) {
@@ -317,7 +173,7 @@ public class Enemy {
 		}
 	}
 
-	private boolean inCollision(float posX, float posY) {
+	protected boolean inCollision(float posX, float posY) {
 		boolean collided = false;
 
 		if (Helper.isOutOfScreen(posX, posY)) {
