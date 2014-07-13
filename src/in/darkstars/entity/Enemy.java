@@ -32,6 +32,7 @@ public abstract class Enemy {
 	private Animation spawn;
 	private Animation shield;
 	private double timeElapsed;
+	private double shieldTime = 5000;
 	private Sound destroyed;
 
 	protected int health;
@@ -50,7 +51,6 @@ public abstract class Enemy {
 
 	protected Direction direc;
 	private Random random;
-	private double shieldTime = 5000;
 
 	public Enemy(int posX, int posY, TMap map) throws SlickException {
 

@@ -2,6 +2,7 @@ package in.darkstars.main;
 
 import in.darkstars.entity.Bullet;
 import in.darkstars.entity.Enemy;
+import in.darkstars.entity.Player;
 import in.darkstars.entity.TMap;
 import in.darkstars.entity.tank.TankFactory;
 import in.darkstars.helper.SpriteSheetFactory;
@@ -39,23 +40,17 @@ public class JTank extends BasicGame {
 
 	public static final int NUMBER_OF_BULLETS_PER_FRAME = 5;
 	private static final int TILEWIDTH = 16;
-	private static final int TILEHEIGHT = 16;
+	public static final int TILEHEIGHT = 16;
 	public static final int SIZE = 16;
-	private static final float SPEED = 3f;
 	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 10;
-	private Direction tankDirection;
 
 	private int statusCode = 0;
 	private TMap map;
 	private int mapPosX = 0;
 	private int mapPosY = 0;
-	private float posY = 0;
-	private float posX = 0;
 
-	private Bullet bulletList[];
+	private Player player;
 	private Enemy enemyList[];
-	private Animation upTank, leftTank,	downTank, rightTank, player;
-	private long score;
 
 	/**
 	 * @param title
@@ -91,11 +86,11 @@ public class JTank extends BasicGame {
 		map.render(mapPosX, mapPosY, 0);
 
 		/* Rendering player on the screen */
-		player.draw((int) posX, (int) posY);
+		player.render();
 
 		/* Rendering bullets on the screen */
-		for (int i = 0; i < bulletList.length; i++) {
-			Bullet bullet = bulletList[i];
+		for (int i = 0; i < player.getBulletList().length; i++) {
+			Bullet bullet = player.getBulletList()[i];
 			if (bullet != null) {
 				bullet.render(g);
 			}
@@ -111,18 +106,14 @@ public class JTank extends BasicGame {
 
 		}
 		map.render(mapPosX, mapPosY, 1);
-		g.drawString("Score "+Long.toString(score), 90, 10);
+		g.drawString("Score "+Long.toString(player.getScore()), 90, 10);
 
 	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		map = new TMap("resources/maps/newStageOne.tmx"); // Initializing the map.
-		bulletList = new Bullet[NUMBER_OF_BULLETS_PER_FRAME]; // Initializing
-																// the list for
-																// tracking
-																// player
-																// bullets.
+		player = new Player(0,JTank.HEIGHT - TILEHEIGHT,map);
 		enemyList = new Enemy[NUMBER_OF_ENEMIES_PER_FRAME]; // Initializing the
 															// list for enemies.
 		for (int i = 0; i < enemyList.length; i++) // Creating enemies and
@@ -134,20 +125,6 @@ public class JTank extends BasicGame {
 			//enemyList[i].render();
 		}
 		
-		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();				
-		Image upTank [] = {jTankSpriteSheet.getSubImage(0, 0), jTankSpriteSheet.getSubImage(1, 0)};
-		Image leftTank [] = {jTankSpriteSheet.getSubImage(2, 0), jTankSpriteSheet.getSubImage(3, 0)};
-		Image downTank [] = {jTankSpriteSheet.getSubImage(4, 0), jTankSpriteSheet.getSubImage(5, 0)};
-		Image rightTank [] = {jTankSpriteSheet.getSubImage(6, 0), jTankSpriteSheet.getSubImage(7, 0)};
-		this.upTank = new Animation(upTank,ANIMATION_DELAY,false);
-		this.leftTank = new Animation(leftTank,ANIMATION_DELAY,false);
-		this.downTank = new Animation(downTank,ANIMATION_DELAY,false);
-		this.rightTank = new Animation(rightTank,ANIMATION_DELAY,false);
-
-		player = this.upTank;
-		tankDirection = Direction.UP;
-		posX = 0;
-		posY = HEIGHT - TILEHEIGHT;
 	}
 
 	@Override
@@ -159,66 +136,26 @@ public class JTank extends BasicGame {
 		/* Key press handling code */
 
 		if (input.isKeyDown(Input.KEY_UP)) {
-			player = upTank;
-			tankDirection = Direction.UP;
-			if (!isBlocked(posX, posY - SPEED)) {
-				posY -= SPEED;
-				player.update(delta);
-			}
+			player.changeDirectionTo(Direction.UP);
+			player.update(delta);
 
 		} else if (input.isKeyDown(Input.KEY_DOWN)) {
 
-			player = downTank;
-			tankDirection = Direction.DOWN;
-			if (!isBlocked(posX, posY + SPEED)) {
-				posY += SPEED;
-				player.update(delta);
-			}
+			player.changeDirectionTo(Direction.DOWN);
+			player.update(delta);
 
 		} else if (input.isKeyDown(Input.KEY_RIGHT)) {
-			player = rightTank;
-			tankDirection = Direction.RIGHT;
-			if (!isBlocked(posX + SPEED, posY)) {
-				posX += SPEED;
-				player.update(delta);
-			}
+			
+			player.changeDirectionTo(Direction.RIGHT);
+			player.update(delta);
 
 		} else if (input.isKeyDown(Input.KEY_LEFT)) {
 
-			player = leftTank;
-			tankDirection = Direction.LEFT;
-			if (!isBlocked(posX - SPEED, posY)) {
-				posX -= SPEED;
-				player.update(delta);
-			}
+			player.changeDirectionTo(Direction.LEFT);
+			player.update(delta);
+			
 		} else if (input.isKeyPressed(Input.KEY_SPACE)) {
-			for (int i = 0; i < bulletList.length; i++) {
-				if (bulletList[i] == null) {
-					switch (tankDirection) {
-					case UP:
-						bulletList[i] = new Bullet(posX + SIZE / 2, posY,
-								tankDirection);
-						bulletList[i].makeFiredSound();
-						break;
-					case DOWN:
-						bulletList[i] = new Bullet(posX + SIZE / 2,
-								posY + SIZE, tankDirection);
-						bulletList[i].makeFiredSound();
-						break;
-					case RIGHT:
-						bulletList[i] = new Bullet(posX + SIZE,
-								posY + SIZE / 2, tankDirection);
-						bulletList[i].makeFiredSound();
-						break;
-					case LEFT:
-						bulletList[i] = new Bullet(posX, posY + SIZE / 2,
-								tankDirection);
-						bulletList[i].makeFiredSound();
-						break;
-					}
-					break;
-				}
-			}
+			player.fire();
 
 		} else if (input.isKeyPressed(Input.KEY_ESCAPE)) {
 
@@ -226,25 +163,7 @@ public class JTank extends BasicGame {
 		}
 
 		/* Code to update bullets */
-		for (int i = 0; i < bulletList.length; i++) {
-			Bullet bullet = bulletList[i];
-			if (bullet != null) {
-				if (bullet.isOutOfScreen()
-						|| (bullet.isExploded() && bullet.getExplosion()
-								.isStopped())) {
-					bulletList[i] = null;
-				} else if (map.inCollision(new Rectangle(
-						(int) bullet.getPosX(), (int) bullet.getPosY(),
-						Bullet.WIDTH, Bullet.HEIGHT))) {
-//					bullet.makeHitSound();
-					bullet.setExploded(true);
-					bullet.getExplosion().update(delta);
-				}else {
-					bullet.update();
-				}
-
-			}
-		}
+		player.updateBullets(delta);
 
 		/* Code to update the enemies */
 		for (int i = 0; i < enemyList.length; i++) {
@@ -255,7 +174,8 @@ public class JTank extends BasicGame {
 			else
 			{
 				enemy.makeDestroyedSound();
-				score++;
+				long score = player.getScore();
+				player.setScore(++score);
 				int posX = map.getValidPos()[0];
 				int posY = map.getValidPos()[1];
 				enemyList[i] = TankFactory.getTank(posX, posY, map); 
@@ -263,8 +183,8 @@ public class JTank extends BasicGame {
 		}
 		
 		/* Code to update the health and bullet explosion when enemy is hit by a bullet*/
-		for (int i = 0; i < bulletList.length; i++) {
-			Bullet bullet = bulletList[i];
+		for (int i = 0; i < player.getBulletList().length; i++) {
+			Bullet bullet = player.getBulletList()[i];
 			if (bullet == null || bullet.isExploded())
 				continue;
 			else {
@@ -283,18 +203,4 @@ public class JTank extends BasicGame {
 		}
 	}
 
-	private boolean isBlocked(float x, float y) {
-		boolean inCollision = false;
-
-		Rectangle playerBounds = new Rectangle((int) x, (int) y, SIZE, SIZE);
-		if (x > (WIDTH - SIZE) || x < 0 || y > (HEIGHT - SIZE) || y < 0) {
-			inCollision = true;
-		} else {
-			if (map.inCollision(playerBounds))
-				inCollision = true;
-
-		}
-
-		return inCollision;
-	}
 }
