@@ -9,6 +9,8 @@ import in.darkstars.main.JTank;
 import in.darkstars.main.JTank.Direction;
 
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Float;
 import java.util.Random;
 
 import org.newdawn.slick.Animation;
@@ -111,7 +113,7 @@ public abstract class Enemy {
 		if (spawn.isStopped()) {
 			switch (direc) {
 			case UP:
-				if (!inCollision(posX, posY - speed)) {
+				if (!inCollision(posX, posY - (delta /1000.0f) *  speed)) {
 					posY -= speed;
 					enemy.update(delta);
 				} else {
@@ -119,7 +121,7 @@ public abstract class Enemy {
 				}
 				break;
 			case DOWN:
-				if (!inCollision(posX, posY + speed)) {
+				if (!inCollision(posX, posY + (delta /1000.0f) * speed)) {
 					posY += speed;
 					enemy.update(delta);
 				} else {
@@ -127,7 +129,7 @@ public abstract class Enemy {
 				}
 				break;
 			case LEFT:
-				if (!inCollision(posX - speed, posY)) {
+				if (!inCollision(posX - (delta /1000.0f) * speed, posY)) {
 					posX -= speed;
 					enemy.update(delta);
 				} else {
@@ -135,7 +137,7 @@ public abstract class Enemy {
 				}
 				break;
 			case RIGHT:
-				if (!inCollision(posX + speed, posY)) {
+				if (!inCollision(posX + (delta /1000.0f) * speed, posY)) {
 					posX += speed;
 					enemy.update(delta);
 				} else {
@@ -179,8 +181,8 @@ public abstract class Enemy {
 		if (Helper.isOutOfScreen(posX, posY)) {
 			collided = true;
 		} else {
-			for (Rectangle obstacle : map.getObstaclesList()) {
-				if (obstacle.intersects(new Rectangle((int) posX, (int) posY,
+			for (Rectangle2D.Float obstacle : map.getObstaclesList()) {
+				if (obstacle.intersects(new Rectangle2D.Float( posX, posY,
 						JTank.SIZE, JTank.SIZE))) {
 					collided = true;
 					break;
@@ -189,12 +191,17 @@ public abstract class Enemy {
 		}
 		return collided;
 	}
+	
+	public void fire()
+	{
+		
+	}
 
 	public boolean isHit(float posX, float posY) {
 		boolean isHit = false;
-		Rectangle playerBounds = new Rectangle((int) this.posX,
-				(int) this.posY, JTank.SIZE, JTank.SIZE);
-		Rectangle bulletBounds = new Rectangle((int) posX, (int) posY,
+		Rectangle2D.Float playerBounds = new Rectangle2D.Float( this.posX,
+				this.posY, JTank.SIZE, JTank.SIZE);
+		Rectangle2D.Float bulletBounds = new Rectangle2D.Float( posX,  posY,
 				Bullet.WIDTH, Bullet.HEIGHT);
 		if (playerBounds.intersects(bulletBounds)) {
 			isHit = true;

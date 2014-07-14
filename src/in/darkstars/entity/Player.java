@@ -6,6 +6,8 @@ import in.darkstars.main.JTank;
 import in.darkstars.main.JTank.Direction;
 
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Float;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
@@ -23,7 +25,7 @@ public class Player {
 	private static final int SIZE = 16;
 	private static final int HEIGHT = 16;
 	private static final int WIDTH = 16;
-	private static final float SPEED = 3.0f;
+	private static final float SPEED = 2.0f;
 	private static final int BULLET_MAX = 5;
 	private Animation up, down, left, right, player;
 	private float posY;
@@ -96,25 +98,25 @@ public class Player {
 	public void update(int delta) {
 		switch (direction) {
 		case UP:
-			if (!isBlocked(posX, posY - SPEED)) {
+			if (!isBlocked(posX, posY - (delta /1000.0f) * SPEED)) {
 				posY -= SPEED;
 				player.update(delta);
 			}
 			break;
 		case DOWN:
-			if (!isBlocked(posX, posY + SPEED)) {
+			if (!isBlocked(posX, posY + (delta /1000.0f) * SPEED)) {
 				posY += SPEED;
 				player.update(delta);
 			}
 			break;
 		case LEFT:
-			if (!isBlocked(posX - SPEED, posY)) {
+			if (!isBlocked(posX - (delta /1000.0f) * SPEED, posY)) {
 				posX -= SPEED;
 				player.update(delta);
 			}
 			break;
 		case RIGHT:
-			if (!isBlocked(posX + SPEED, posY)) {
+			if (!isBlocked(posX + (delta /1000.0f) *  SPEED, posY)) {
 				posX += SPEED;
 				player.update(delta);
 			}
@@ -154,7 +156,7 @@ public class Player {
 	private boolean isBlocked(float x, float y) {
 		boolean inCollision = false;
 
-		Rectangle playerBounds = new Rectangle((int) x, (int) y, SIZE, SIZE);
+		Rectangle2D.Float playerBounds = new Rectangle2D.Float( x, y, (float)SIZE, (float)SIZE);
 		if (x > (JTank.WIDTH - SIZE) || x < 0 || y > (JTank.HEIGHT - SIZE) || y < 0) {
 			inCollision = true;
 		} else {
@@ -196,8 +198,8 @@ public class Player {
 						|| (bullet.isExploded() && bullet.getExplosion()
 								.isStopped())) {
 					bulletList[i] = null;
-				} else if (map.inCollision(new Rectangle(
-						(int) bullet.getPosX(), (int) bullet.getPosY(),
+				} else if (map.inCollision(new Rectangle2D.Float(
+						 bullet.getPosX(), bullet.getPosY(),
 						Bullet.WIDTH, Bullet.HEIGHT))) {
 //					bullet.makeHitSound();
 					bullet.setExploded(true);
