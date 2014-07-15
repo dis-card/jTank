@@ -25,7 +25,7 @@ public class Player {
 	private static final int SIZE = 16;
 	private static final int HEIGHT = 16;
 	private static final int WIDTH = 16;
-	private static final float SPEED = 2.0f;
+	private static final float SPEED = 50.0f;
 	private static final int BULLET_MAX = 5;
 	private Animation up, down, left, right, player;
 	private float posY;
@@ -99,25 +99,25 @@ public class Player {
 		switch (direction) {
 		case UP:
 			if (!isBlocked(posX, posY - (delta /1000.0f) * SPEED)) {
-				posY -= SPEED;
+				posY -=  (delta /1000.0f) * SPEED;
 				player.update(delta);
 			}
 			break;
 		case DOWN:
 			if (!isBlocked(posX, posY + (delta /1000.0f) * SPEED)) {
-				posY += SPEED;
+				posY +=  (delta /1000.0f) * SPEED;
 				player.update(delta);
 			}
 			break;
 		case LEFT:
 			if (!isBlocked(posX - (delta /1000.0f) * SPEED, posY)) {
-				posX -= SPEED;
+				posX -=  (delta /1000.0f) * SPEED;
 				player.update(delta);
 			}
 			break;
 		case RIGHT:
 			if (!isBlocked(posX + (delta /1000.0f) *  SPEED, posY)) {
-				posX += SPEED;
+				posX +=  (delta /1000.0f) * SPEED;
 				player.update(delta);
 			}
 			break;

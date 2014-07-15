@@ -64,7 +64,7 @@ public class JTank extends BasicGame {
 		try {
 			AppGameContainer gameContainer = new AppGameContainer(new JTank());
 			gameContainer.setDisplayMode(WIDTH, HEIGHT, false);
-			// gameContainer.setTargetFrameRate(3);
+			 gameContainer.setTargetFrameRate(60);
 			gameContainer.start();
 		} catch (SlickException e) {
 

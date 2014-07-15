@@ -19,7 +19,7 @@ import org.newdawn.slick.SpriteSheet;
 public class Houdini extends Enemy {
 
 	private static final int LIFE = 8;
-	private static final float SPEED = 2.0f;
+	private static final float SPEED = 30.0f;
 
 	public Houdini(int posX, int posY, TMap map) throws SlickException {
 		super(posX, posY, map);

@@ -20,7 +20,7 @@ import org.newdawn.slick.SpriteSheet;
 public class Alpha extends Enemy {
 
 	public static final int LIFE = 4;
-	private static final float SPEED = 1.0f;
+	private static final float SPEED = 25.0f;
 	public Alpha(int posX, int posY, TMap map) throws SlickException {
 		super(posX, posY, map);
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();

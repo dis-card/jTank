@@ -19,7 +19,7 @@ import org.newdawn.slick.SpriteSheet;
 public class SharpShooter extends Enemy {
 
 	private static final int LIFE = 9;
-	private static final float SPEED = 1.0f;
+	private static final float SPEED = 35.0f;
 
 	public SharpShooter(int posX, int posY, TMap map) throws SlickException {
 		super(posX, posY, map);

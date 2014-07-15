@@ -19,7 +19,7 @@ import org.newdawn.slick.SpriteSheet;
 public class Cobra extends Enemy {
 
 	private static final int LIFE = 10;
-	private static final float SPEED = 1.0f;
+	private static final float SPEED = 24.0f;
 
 	public Cobra(int posX, int posY, TMap map) throws SlickException {
 		super(posX, posY, map);

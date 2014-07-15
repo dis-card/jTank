@@ -27,9 +27,9 @@ import org.newdawn.slick.SpriteSheet;
  */
 public abstract class Enemy {
 
-	protected float speed = 1f;
-	protected int posX;
-	protected int posY;
+	protected float speed = 20.0f;
+	protected float posX;
+	protected float posY;
 	protected Animation up, down, left, right, enemy;
 	private Animation spawn;
 	private Animation shield;
@@ -114,7 +114,7 @@ public abstract class Enemy {
 			switch (direc) {
 			case UP:
 				if (!inCollision(posX, posY - (delta /1000.0f) *  speed)) {
-					posY -= speed;
+					posY -= (delta /1000.0f) * speed;
 					enemy.update(delta);
 				} else {
 					changeDirection();
@@ -122,7 +122,7 @@ public abstract class Enemy {
 				break;
 			case DOWN:
 				if (!inCollision(posX, posY + (delta /1000.0f) * speed)) {
-					posY += speed;
+					posY += (delta /1000.0f) *  speed;
 					enemy.update(delta);
 				} else {
 					changeDirection();
@@ -130,7 +130,7 @@ public abstract class Enemy {
 				break;
 			case LEFT:
 				if (!inCollision(posX - (delta /1000.0f) * speed, posY)) {
-					posX -= speed;
+					posX -= (delta /1000.0f) * speed;
 					enemy.update(delta);
 				} else {
 					changeDirection();
@@ -138,7 +138,7 @@ public abstract class Enemy {
 				break;
 			case RIGHT:
 				if (!inCollision(posX + (delta /1000.0f) * speed, posY)) {
-					posX += speed;
+					posX += (delta /1000.0f) * speed;
 					enemy.update(delta);
 				} else {
 					changeDirection();

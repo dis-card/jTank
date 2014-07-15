@@ -19,7 +19,7 @@ import org.newdawn.slick.SpriteSheet;
 public class Sweeper extends Enemy {
 	
 	public static final int LIFE = 7;
-	public static final float SPEED = 1.0f;
+	public static final float SPEED = 30.0f;
 	
 
 	public Sweeper(int posX, int posY, TMap map) throws SlickException {
