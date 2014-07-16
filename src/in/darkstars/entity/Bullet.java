@@ -4,7 +4,9 @@ import in.darkstars.helper.SoundFactory;
 import in.darkstars.helper.SoundFactory.SoundType;
 import in.darkstars.helper.SpriteSheetFactory;
 import in.darkstars.main.JTank;
-import in.darkstars.main.JTank.Direction;
+import in.darkstars.main.JTank.*;
+import in.darkstars.state.GamePlay;
+import in.darkstars.state.GamePlay.Direction;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
@@ -78,11 +80,11 @@ public class Bullet {
 				switch (bulletDirection) {
 				case UP:
 				case DOWN:
-					posX -= JTank.SIZE / 2;
+					posX -= GamePlay.SIZE / 2;
 					break;
 				case LEFT:
 				case RIGHT:
-					posY -= JTank.SIZE / 2;
+					posY -= GamePlay.SIZE / 2;
 					break;
 
 				}

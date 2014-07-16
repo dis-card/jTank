@@ -3,7 +3,7 @@ package in.darkstars.entity;
 import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 import in.darkstars.helper.SpriteSheetFactory;
 import in.darkstars.main.JTank;
-import in.darkstars.main.JTank.Direction;
+import in.darkstars.state.GamePlay.Direction;
 
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;

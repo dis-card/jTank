@@ -6,7 +6,8 @@ import in.darkstars.helper.SoundFactory;
 import in.darkstars.helper.SoundFactory.SoundType;
 import in.darkstars.helper.SpriteSheetFactory;
 import in.darkstars.main.JTank;
-import in.darkstars.main.JTank.Direction;
+import in.darkstars.state.GamePlay;
+import in.darkstars.state.GamePlay.Direction;
 
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
@@ -183,7 +184,7 @@ public abstract class Enemy {
 		} else {
 			for (Rectangle2D.Float obstacle : map.getObstaclesList()) {
 				if (obstacle.intersects(new Rectangle2D.Float( posX, posY,
-						JTank.SIZE, JTank.SIZE))) {
+						GamePlay.SIZE, GamePlay.SIZE))) {
 					collided = true;
 					break;
 				}
@@ -200,7 +201,7 @@ public abstract class Enemy {
 	public boolean isHit(float posX, float posY) {
 		boolean isHit = false;
 		Rectangle2D.Float playerBounds = new Rectangle2D.Float( this.posX,
-				this.posY, JTank.SIZE, JTank.SIZE);
+				this.posY, GamePlay.SIZE, GamePlay.SIZE);
 		Rectangle2D.Float bulletBounds = new Rectangle2D.Float( posX,  posY,
 				Bullet.WIDTH, Bullet.HEIGHT);
 		if (playerBounds.intersects(bulletBounds)) {

@@ -4,7 +4,7 @@ import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 import in.darkstars.entity.Enemy;
 import in.darkstars.entity.TMap;
 import in.darkstars.helper.SpriteSheetFactory;
-import in.darkstars.main.JTank.Direction;
+import in.darkstars.state.GamePlay.Direction;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;

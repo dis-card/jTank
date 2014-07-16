@@ -1,6 +1,6 @@
 package in.darkstars.entity;
 
-import static in.darkstars.main.JTank.SIZE;
+import static in.darkstars.state.GamePlay.SIZE;
 import in.darkstars.helper.Helper;
 import in.darkstars.main.JTank;
 

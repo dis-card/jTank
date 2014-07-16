@@ -1,7 +1,7 @@
 package in.darkstars.helper;
 
 import static in.darkstars.main.JTank.HEIGHT;
-import static in.darkstars.main.JTank.SIZE;
+import static in.darkstars.state.GamePlay.SIZE;
 import static in.darkstars.main.JTank.WIDTH;
 
 import java.awt.Rectangle;
