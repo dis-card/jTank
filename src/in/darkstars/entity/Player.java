@@ -38,6 +38,7 @@ public class Player {
 	private int timeElapsed;
 	private int shieldTime = 5000;
 	private Bullet bulletList[];
+	private boolean changedPosition;
 
 	public Player(float posX, float posY, TMap map) throws SlickException {
 
@@ -74,6 +75,20 @@ public class Player {
 		bulletList = new Bullet[BULLET_MAX];
 	}
 
+	/**
+	 * @return the changedPosition
+	 */
+	public boolean isChangedPosition() {
+		return changedPosition;
+	}
+
+	/**
+	 * @param changedPosition the changedPosition to set
+	 */
+	public void setChangedPosition(boolean changedPosition) {
+		this.changedPosition = changedPosition;
+	}
+
 	public void changeDirectionTo(Direction direc) {
 		switch (direc) {
 		case UP:
@@ -96,28 +111,33 @@ public class Player {
 	}
 
 	public void update(int delta) {
+		changedPosition = false;
 		switch (direction) {
 		case UP:
 			if (!isBlocked(posX, posY - (delta /1000.0f) * SPEED)) {
 				posY -=  (delta /1000.0f) * SPEED;
-				player.update(delta);
+				changedPosition = true;
+				player.update(delta); // updating the animation
 			}
 			break;
 		case DOWN:
 			if (!isBlocked(posX, posY + (delta /1000.0f) * SPEED)) {
 				posY +=  (delta /1000.0f) * SPEED;
+				changedPosition = true;
 				player.update(delta);
 			}
 			break;
 		case LEFT:
 			if (!isBlocked(posX - (delta /1000.0f) * SPEED, posY)) {
 				posX -=  (delta /1000.0f) * SPEED;
+				changedPosition = true;
 				player.update(delta);
 			}
 			break;
 		case RIGHT:
 			if (!isBlocked(posX + (delta /1000.0f) *  SPEED, posY)) {
 				posX +=  (delta /1000.0f) * SPEED;
+				changedPosition = true;
 				player.update(delta);
 			}
 			break;

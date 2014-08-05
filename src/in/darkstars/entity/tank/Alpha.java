@@ -2,9 +2,9 @@ package in.darkstars.entity.tank;
 
 import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 import in.darkstars.entity.Enemy;
+import in.darkstars.entity.Player;
 import in.darkstars.entity.TMap;
 import in.darkstars.helper.SpriteSheetFactory;
-import in.darkstars.state.GamePlay.Direction;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
@@ -21,8 +21,8 @@ public class Alpha extends Enemy {
 
 	public static final int LIFE = 4;
 	private static final float SPEED = 25.0f;
-	public Alpha(int posX, int posY, TMap map) throws SlickException {
-		super(posX, posY, map);
+	public Alpha(int posX, int posY, TMap map, Player player) throws SlickException {
+		super(posX, posY, map, player);
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();
 			super.up = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(8, 1),

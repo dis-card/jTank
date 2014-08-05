@@ -2,6 +2,7 @@ package in.darkstars.entity.tank;
 
 import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 import in.darkstars.entity.Enemy;
+import in.darkstars.entity.Player;
 import in.darkstars.entity.TMap;
 import in.darkstars.helper.SpriteSheetFactory;
 
@@ -22,8 +23,8 @@ public class Sweeper extends Enemy {
 	public static final float SPEED = 30.0f;
 	
 
-	public Sweeper(int posX, int posY, TMap map) throws SlickException {
-		super(posX, posY, map);
+	public Sweeper(int posX, int posY, TMap map, Player player) throws SlickException {
+		super(posX, posY, map, player);
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();
 			super.up = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(8, 4),

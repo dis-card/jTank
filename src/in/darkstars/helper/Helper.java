@@ -22,6 +22,7 @@ public class Helper {
 	private static Random randomNumGenerator = new Random();
 	public static final String SPRITE_SHEET_PATH = "resources/maps/jTankSpriteSheet.png";
 	public static final int ANIMATION_DELAY = 100;
+	public static enum State { Roam, Search, Persue };
 	public static boolean isInCollision(Rectangle boundedBoxPlayer, Rectangle boundedBoxObject)
 	{
 		boolean collided = false;

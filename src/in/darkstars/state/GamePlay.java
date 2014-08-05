@@ -44,7 +44,7 @@ public class GamePlay extends BasicGameState {
 	private static final int TILEWIDTH = 16;
 	public static final int TILEHEIGHT = 16;
 	public static final int SIZE = 16;
-	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 10;
+	private static final int NUMBER_OF_ENEMIES_PER_FRAME = 1;
 
 	private int statusCode = 0;
 	private TMap map;
@@ -55,11 +55,6 @@ public class GamePlay extends BasicGameState {
 	private Enemy enemyList[];
 
 
-
-	/**
-	 * @param jTank
-	 * @return
-	 */
 
 	@Override
 	public void render(GameContainer container, StateBasedGame sb, Graphics g)
@@ -104,7 +99,7 @@ public class GamePlay extends BasicGameState {
 		{
 			int posX = map.getValidPos()[0];
 			int posY = map.getValidPos()[1];
-			enemyList[i] = TankFactory.getTank(posX, posY, map);
+			enemyList[i] = TankFactory.getTank(posX, posY, map, player);
 			//enemyList[i].render();
 		}
 		
@@ -162,7 +157,7 @@ public class GamePlay extends BasicGameState {
 				player.setScore(++score);
 				int posX = map.getValidPos()[0];
 				int posY = map.getValidPos()[1];
-				enemyList[i] = TankFactory.getTank(posX, posY, map); 
+				enemyList[i] = TankFactory.getTank(posX, posY, map, player); 
 			}
 		}
 		

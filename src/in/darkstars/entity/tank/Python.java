@@ -3,8 +3,8 @@ package in.darkstars.entity.tank;
 
 import static in.darkstars.helper.Helper.ANIMATION_DELAY;
 import in.darkstars.entity.Enemy;
+import in.darkstars.entity.Player;
 import in.darkstars.entity.TMap;
-import in.darkstars.entity.Enemy.CodeName;
 import in.darkstars.helper.SpriteSheetFactory;
 
 import org.newdawn.slick.Animation;
@@ -23,8 +23,8 @@ public class Python extends Enemy {
 	private static final int LIFE = 6;
 	private static final float SPEED = 35.0f;
 
-	public Python(int posX, int posY, TMap map) throws SlickException {
-		super(posX, posY, map);
+	public Python(int posX, int posY, TMap map, Player player) throws SlickException {
+		super(posX, posY, map, player);
 		SpriteSheet jTankSpriteSheet = SpriteSheetFactory.getSpriteSheet();
 			super.up = new Animation(new Image[] {
 					jTankSpriteSheet.getSubImage(8, 3),
